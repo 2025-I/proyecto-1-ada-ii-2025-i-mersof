@@ -5,7 +5,7 @@
 
 Nombre completo | Código
 Sofia Castillo Giraldo | 2266149
-Merly Velasquez Cortez | 2266016
+Merly Velasquez Cortez | 2266016 
 
 ## Descripción del taller
 
