@@ -22,18 +22,19 @@ def read_file():
 
         # Se añaden al grafo la reglas de supervisión
 
-        calcification = list(map(int, lines[i].split()))
+        calification = list(map(int, lines[i].split()))
         i += 1
 
         # en la linea de calificaciones separa y convierte cada caracter en int con la funcion map
 
-        fiesta_company(n, m, grafo, calcification)
+        max_suma(n, m, grafo, calification)
 
         # Se llama la funcion pasandole los datos del probloma para
         # resolver la maximizacion de las calificaciones
 
 
-def fiesta_company(n, m, grafo, calificaciones):
+def max_suma(n, m, grafo, calification):
+
     pass
 
 
