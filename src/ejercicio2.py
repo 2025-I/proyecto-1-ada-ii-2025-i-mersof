@@ -21,19 +21,27 @@ def read_file():
 
         # Se añaden al grafo la reglas de supervisión
 
-        calification = list(map(int, lines[i].split()))
+        califications = list(map(int, lines[i].split()))
         i += 1
 
         # en la linea de calificaciones separa y convierte cada caracter en int con la funcion map
 
-        max_sumaVoraz(n, m, grafo, calification)
+        max_sumaVoraz(m, grafo, califications)
 
         # Se llama la funcion pasandole los datos del probloma para
         # resolver la maximizacion de las calificaciones
 
 
-def max_sumaVoraz(n, m, grafo, calification):
+def max_sumaVoraz(m, grafo, calificaciones):
+
+    maxima_calificacion = max(calificaciones)
+    index_max = calificaciones.index(maxima_calificacion)
+    index_removed = set()
+    total_calificacions = 0
+
     rules = {i: int(0) for i in range(len(grafo))}
+    invitados = [0 for i in range(m)]
+
     i = 0
     nodo_actual = 0
     while i < len(rules) - 1:
@@ -44,11 +52,34 @@ def max_sumaVoraz(n, m, grafo, calification):
 
         nodo_actual += 1
         i += 1
-    print(rules)
 
-    maxima_calification = max(calification)
-    print(maxima_calification)
+    while maxima_calificacion is not None:
 
+        total_calificacions += maxima_calificacion
+        invitados[index_max] = 1
+
+        for key, value in rules.items():
+
+            if key == index_max and value == index_max:
+                index_removed.add(key)
+                total_calificacions -= maxima_calificacion
+                invitados[index_max] = 0
+            elif value == index_max:
+                index_removed.add(key)
+            elif key == index_max:
+                index_removed.add(value)
+
+        index_removed.add(index_max)
+
+        maxima_calificacion = max((v for i, v in enumerate(calificaciones) if i not in index_removed),default=None)
+
+        if maxima_calificacion is None:
+            break
+        index_max = calificaciones.index(maxima_calificacion)
+
+        invitados.append(total_calificacions)
+
+    return invitados
 
 def max_sumaDinamica(n, m, grafo, calification):
     pass
