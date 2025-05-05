@@ -27,7 +27,7 @@ def dp_longitud_maxima(s):
     return dp
 
 # ==============================
-# GENERAR TODAS LAS SUBSECUENCIAS MÁXIMAS
+# TODAS LAS SUBSECUENCIAS MÁXIMAS
 # ==============================
 def backtrack(s, i, j, actual, dp, resultados):
     if i > j:
@@ -51,10 +51,37 @@ def backtrack(s, i, j, actual, dp, resultados):
         if dp[i][j-1] >= dp[i+1][j]:
             backtrack(s, i, j-1, actual, dp, resultados)
 
-
+# ==============================
+# SOLUCIÓN PRINCIPAL
+# ==============================
+def resolver_problema_1(lineas_entrada):
+    n = int(lineas_entrada[0])
+    resultados = []
+    
+    for linea in lineas_entrada[1:n+1]:
+        normalizada = normalizar(linea.strip())
+        if not normalizada:
+            resultados.append("")
+            continue
+        
+        # Calcular DP y longitud máxima
+        dp = dp_longitud_maxima(normalizada)
+        max_longitud = dp[0][len(normalizada)-1]
+        
+        # Generar todas las subsecuencias máximas
+        conjunto_resultados = set()
+        backtrack(normalizada, 0, len(normalizada)-1, "", dp, conjunto_resultados)
+        
+        # Filtrar y ordenar
+        subsecuencias_maximas = [subseq for subseq in conjunto_resultados 
+                                 if len(subseq) == max_longitud]
+        subsecuencias_maximas.sort()  # Ordenar alfabéticamente
+        resultados.append(' '.join(subsecuencias_maximas))
+    
+    return resultados
 
 # ==============================
-#  FILE CHOOSER
+# FILE CHOOSER
 # ==============================
 def seleccionar_archivo():
     raiz = tk.Tk()
@@ -70,4 +97,12 @@ def seleccionar_archivo():
     
     with open(ruta_archivo, 'r') as archivo:
         return archivo.read().splitlines()
+
+# =============================
+# MAINn 
+# ==============================
+if __name__ == "__main__":
+    lineas_entrada = seleccionar_archivo()
+    resultados = resolver_problema_1(lineas_entrada)
+    print("\n".join(resultados))
 
