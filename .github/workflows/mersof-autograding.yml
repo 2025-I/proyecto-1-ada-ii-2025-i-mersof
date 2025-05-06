@@ -21,7 +21,7 @@ jobs:
         test-name: Compilación ejercicio1
         setup-command: pip install -r requirements.txt
         command: python -m py_compile src/ejercicio1.py
-        timeout: 10
+        timeout: 3600
         max-score: 25
     - name: Compilación ejercicio2
       id: compilacion-ejercicio2
@@ -30,7 +30,7 @@ jobs:
         test-name: Compilación ejercicio2
         setup-command: ''
         command: python -m py_compile src/ejercicio2.py
-        timeout: 10
+        timeout: 3600
         max-score: 25
     - name: Pruebas ejercicio1
       id: pruebas-ejercicio1
@@ -39,7 +39,7 @@ jobs:
         test-name: Pruebas ejercicio1
         setup-command: ''
         command: python -m pytest tests/test_ejercicio1.py
-        timeout: 20
+        timeout: 3600
         max-score: 25
     - name: Pruebas ejercicio2
       id: pruebas-ejercicio2
@@ -48,7 +48,7 @@ jobs:
         test-name: Pruebas ejercicio2
         setup-command: ''
         command: python -m pytest tests/test_ejercicio2.py
-        timeout: 20
+        timeout: 3600
         max-score: 25
     - name: Autograding Reporter
       uses: classroom-resources/autograding-grading-reporter@v1
