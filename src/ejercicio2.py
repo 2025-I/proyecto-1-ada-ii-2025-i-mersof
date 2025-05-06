@@ -8,27 +8,30 @@ def read_file(funcion):
     n_problems = int(lines[i])
     i += 1
 
+    # Recorre de acuerdo a el numero de problemas y va guardando en cada uno:
+    # m -> numero de empleados
+    # El grafo
+    # Lista de calificaciones de cada empleado
+
     for n in range(n_problems):
 
-        m = int(lines[i])
+        m = int(lines[i])  # numero de empleados
         i += 1
 
-        grafo = []
+        grafo = []          # Genera la matriz de las reglas de supervision
         for _ in range(m):
             grafo.append(lines[i].split())
             i += 1
 
-        # Se añaden al grafo la reglas de supervisión
-
+        # Toma cada caracter de la linea y lo convierte en una lista de enteros separados con coma
         calificaciones = list(map(int, lines[i].split()))
-        i += 1
 
-        # en la linea de calificaciones separa y convierte cada caracter en int con la funcion map
+        i += 1
 
         arbol_reglasSupervicion(m, grafo, calificaciones, funcion)
 
-        # Se llama la funcion pasandole los datos del probloma para
-        # resolver la maximizacion de las calificaciones
+        # Se llama la funcion pasandole los datos del problema para
+        # resolver la maximizacion de las calificaciones y construir la solucion optima
 
 
 def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
