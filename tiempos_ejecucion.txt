@@ -1,0 +1,4 @@
+Tiempos de ejecución de cada enfoque:
+dinamico: 0.0481 segundos
+fuerza_bruta: 9.4948 segundos
+voraz: 0.0043 segundos

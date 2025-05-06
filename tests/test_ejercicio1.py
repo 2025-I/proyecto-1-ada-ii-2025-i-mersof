@@ -2,7 +2,7 @@ import pytest
 import time
 from src.ejercicio1 import resolver_problema_1
 from src.ejercicio1 import normalizar, dp_longitud_maxima, backtrack, resolver_problema_1
-
+from src.ejercicio1 import resolver_problema_1_fuerza_bruta, resolver_problema_1_voraz
 # =======================
 # TESTS PARA normalizar
 # =======================
@@ -82,6 +82,131 @@ def test_resolver_linea_vacia_y_simbolos():
     salida = resolver_problema_1(entrada)
     assert salida == ["", ""]
 
+# =======================
+# TESTS COMPARATIVOS ENTRE ENFOQUES
+# =======================
+
+def es_palindromo(s):
+    return s == s[::-1]
+
+def es_subsecuencia(cadena, subsecuencia):
+    it = iter(cadena)
+    return all(c in it for c in subsecuencia)
+def test_comparar_enfoques_palindromos_simples():
+    entrada = ["3", "oso", "ana", "12321"]
+    lineas = entrada[1:]
+    
+    salida_dp = resolver_problema_1(entrada)
+    salida_fb = resolver_problema_1_fuerza_bruta(entrada)
+    salida_vz = resolver_problema_1_voraz(entrada)
+
+    for i, original in enumerate(lineas):
+        original_norm = normalizar(original)
+        r_dp = salida_dp[i]
+        r_fb = salida_fb[i]
+        r_vz = salida_vz[i]
+
+        # Todos deben ser palíndromos
+        for r in [r_dp, r_fb, r_vz]:
+            assert es_palindromo(r)
+            assert es_subsecuencia(original_norm, r)
+
+        # Las longitudes deben coincidir (máximo palíndromo)
+        max_len = max(len(r_dp), len(r_fb), len(r_vz))
+        assert len(r_dp) == max_len
+        assert len(r_fb) == max_len
+        assert len(r_vz) == max_len
+
+
+def test_comparar_enfoques_cadena_sin_palindromos():
+    entrada = ["1", "xyz"]
+    original = normalizar("xyz")
+
+    salida_dp = resolver_problema_1(entrada)[0]
+    salida_fb = resolver_problema_1_fuerza_bruta(entrada)[0]
+    salida_vz = resolver_problema_1_voraz(entrada)[0]
+
+    max_len = max(len(salida_dp), len(salida_fb), len(salida_vz))
+
+    # Todas deben tener la misma longitud
+    assert len(salida_dp) == max_len
+    assert len(salida_fb) == max_len
+    assert len(salida_vz) == max_len
+
+    # Todas deben ser palíndromos y subsecuencias válidas
+    for salida in [salida_dp, salida_fb, salida_vz]:
+        assert es_palindromo(salida)
+        assert es_subsecuencia(original, salida)
+
+def test_comparar_enfoques_mediano_1000():
+    entrada = ["1000"] + ["anitalavalatina"] * 1000
+    lineas = entrada[1:]
+
+    salida_dp = resolver_problema_1(entrada)
+    salida_fb = resolver_problema_1_fuerza_bruta(entrada)
+    salida_vz = resolver_problema_1_voraz(entrada)
+
+    for i, original in enumerate(lineas):
+        original_norm = normalizar(original)
+        r_dp = salida_dp[i]
+        r_fb = salida_fb[i]
+        r_vz = salida_vz[i]
+
+        for r in [r_dp, r_fb, r_vz]:
+            assert es_palindromo(r)
+            assert es_subsecuencia(original_norm, r)
+
+        max_len = max(len(r_dp), len(r_fb), len(r_vz))
+        assert len(r_dp) == max_len
+        assert len(r_fb) == max_len
+        assert len(r_vz) == max_len
+
+def test_comparar_enfoques_grande_10000():
+    entrada = ["10000"] + ["reconocer"] * 10000
+    lineas = entrada[1:]
+
+    salida_dp = resolver_problema_1(entrada)
+    salida_fb = resolver_problema_1_fuerza_bruta(entrada)
+    salida_vz = resolver_problema_1_voraz(entrada)
+
+    for i, original in enumerate(lineas):
+        original_norm = normalizar(original)
+        r_dp = salida_dp[i]
+        r_fb = salida_fb[i]
+        r_vz = salida_vz[i]
+
+        for r in [r_dp, r_fb, r_vz]:
+            assert es_palindromo(r)
+            assert es_subsecuencia(original_norm, r)
+
+        max_len = max(len(r_dp), len(r_fb), len(r_vz))
+        assert len(r_dp) == max_len
+        assert len(r_fb) == max_len
+        assert len(r_vz) == max_len
+
+def test_comparar_enfoques_extra_grande_50000():
+    entrada = ["50000"] + ["oso"] * 50000
+    lineas = entrada[1:]
+
+    salida_dp = resolver_problema_1(entrada)
+    salida_fb = resolver_problema_1_fuerza_bruta(entrada)
+    salida_vz = resolver_problema_1_voraz(entrada)
+
+    for i, original in enumerate(lineas):
+        original_norm = normalizar(original)
+        r_dp = salida_dp[i]
+        r_fb = salida_fb[i]
+        r_vz = salida_vz[i]
+
+        for r in [r_dp, r_fb, r_vz]:
+            assert es_palindromo(r)
+            assert es_subsecuencia(original_norm, r)
+
+        max_len = max(len(r_dp), len(r_fb), len(r_vz))
+        assert len(r_dp) == max_len
+        assert len(r_fb) == max_len
+        assert len(r_vz) == max_len
+
 
 # =======================
 # CASOS DE TAMAÑO JUGUETE
@@ -139,3 +264,36 @@ def test_extra_grande_50000_elementos():
     assert all(r == "oso" for r in salida)
     assert t_fin - t_inicio < 180  # tolerancia para ejecución prolongada
 
+
+
+def test_tiempos_ejecucion_enfoques():
+    entrada = ["1000"] + ["anitalavalatina"] * 1000
+    tiempos = {}
+
+    t0 = time.time()
+    resolver_problema_1(entrada)
+    tiempos["dinamico"] = time.time() - t0
+
+    t0 = time.time()
+    resolver_problema_1_fuerza_bruta(entrada)
+    tiempos["fuerza_bruta"] = time.time() - t0
+
+    t0 = time.time()
+    resolver_problema_1_voraz(entrada)
+    tiempos["voraz"] = time.time() - t0
+
+    # Mostrar por consola
+    print("\n--- Tiempo de ejecución ---")
+    for enfoque, t in tiempos.items():
+        print(f"{enfoque}: {t:.4f} segundos")
+
+    # Guardar en archivo
+    with open("tiempos_ejecucion.txt", "w") as f:
+        f.write("Tiempos de ejecución de cada enfoque:\n")
+        for enfoque, t in tiempos.items():
+            f.write(f"{enfoque}: {t:.4f} segundos\n")
+
+    # Afirmaciones básicas de rendimiento
+    assert tiempos["dinamico"] < 5  # tiempo razonable para 1000 cadenas
+    assert tiempos["fuerza_bruta"] > tiempos["voraz"]  # voraz debería ser más rápido
+    assert tiempos["voraz"] < 5  # tiempo razonable para 1000 cadenas
