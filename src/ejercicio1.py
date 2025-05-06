@@ -1,82 +1,71 @@
-import re
+import unicodedata
 import tkinter as tk
 from tkinter import filedialog
-import unicodedata
-
-# ==============================
-# NORMALIZACIÓN DE LA CADENA
-# ==============================
+import re
 
 def normalizar(cadena):
-    cadena = unicodedata.normalize('NFKD', cadena).encode('ascii', 'ignore').decode('utf-8')
-    return re.sub(r'[^a-z0-9]', '', cadena.lower())  # Incluye números y minúsculas
-
-# ==============================
-# PROGRAMACIÓN DINÁMICA PARA LONGITUD MÁXIMA
-# ==============================
+    cadena = cadena.lower()
+    cadena = ''.join(
+        c for c in unicodedata.normalize('NFD', cadena)
+        if unicodedata.category(c) != 'Mn'
+    )
+    cadena = re.sub(r'[^a-z0-9]', '', cadena)
+    return cadena
 
 def dp_longitud_maxima(s):
     n = len(s)
     dp = [[0]*n for _ in range(n)]
-
-    for i in range(n-1, -1, -1):
+    
+    for i in range(n):
         dp[i][i] = 1
-        for j in range(i+1, n):
+    
+    for longitud in range(2, n+1):
+        for i in range(n - longitud + 1):
+            j = i + longitud - 1
             if s[i] == s[j]:
-                dp[i][j] = 2 + (dp[i+1][j-1] if i+1 <= j-1 else 0)
+                if longitud == 2:
+                    dp[i][j] = 2
+                else:
+                    dp[i][j] = 2 + dp[i+1][j-1]
             else:
                 dp[i][j] = max(dp[i+1][j], dp[i][j-1])
+    
     return dp
 
-# ==============================
-# TODAS LAS SUBSECUENCIAS MÁXIMAS
-# ==============================
-
-def backtrack(s, i, j, actual, dp, resultados):
+def backtrack(s, i, j, camino, dp, resultados):
     if i > j:
-        resultados.add(actual)
+        resultados.add(camino + camino[::-1])
         return
     if i == j:
-        resultados.add(actual + s[i])
+        resultados.add(camino + s[i] + camino[::-1])
         return
-
-    if s[i] == s[j]:
-
-        nueva_actual = actual + s[i]
-        backtrack(s, i+1, j-1, nueva_actual, dp, resultados)
-
-        if i+1 > j-1:
-            resultados.add(nueva_actual + s[j])  # Agregar la subsecuencia completa
+    if s[i] == s[j] and dp[i][j] == dp[i+1][j-1] + 2:
+        backtrack(s, i+1, j-1, camino + s[i], dp, resultados)
     else:
 
         if dp[i+1][j] >= dp[i][j-1]:
-            backtrack(s, i+1, j, actual, dp, resultados)
+            backtrack(s, i+1, j, camino, dp, resultados)
         if dp[i][j-1] >= dp[i+1][j]:
-            backtrack(s, i, j-1, actual, dp, resultados)
+            backtrack(s, i, j-1, camino, dp, resultados)
 
-# ==============================
-# SOLUCIÓN PRINCIPAL
-# ==============================
-
-def resolver_problema_1(lineas_entrada):
-    n = int(lineas_entrada[0])
+def resolver_problema_1(entrada):
+    n = int(entrada[0])
     resultados = []
-    
-    for linea in lineas_entrada[1:n+1]:
-        normalizada = normalizar(linea.strip())
-        if not normalizada:
+
+    for i in range(1, n+1):
+        original = entrada[i]
+        cadena = normalizar(original)
+        if not cadena:
             resultados.append("")
             continue
-            
-        dp = dp_longitud_maxima(normalizada)
-        max_len = dp[0][len(normalizada)-1]
-        conjunto_resultados = set()
-        backtrack(normalizada, 0, len(normalizada)-1, "", dp, conjunto_resultados)
-        
-        subsecuencias_maximas = [subseq for subseq in conjunto_resultados if len(subseq) == max_len]
-        resultados.append(' '.join(sorted(subsecuencias_maximas)))
+        dp = dp_longitud_maxima(cadena)
+        subconjuntos = set()
+        backtrack(cadena, 0, len(cadena)-1, "", dp, subconjuntos)
+        resultado = sorted(subconjuntos)[0]  # elegimos el primero alfabéticamente
+        resultados.append(resultado)
     
     return resultados
+
 
 # ==============================
 # FILE CHOOSER
@@ -105,4 +94,3 @@ if __name__ == "__main__":
     lineas_entrada = seleccionar_archivo()
     resultados = resolver_problema_1(lineas_entrada)
     print("\n".join(resultados))
-    
