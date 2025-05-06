@@ -1,8 +1,7 @@
-def read_file():
+def read_file(funcion):
     file2 = "file2.txt"
 
     with open(file2, 'r') as f:
-
         lines = [linea.strip() for linea in f.readlines() if linea.strip()]
 
     i = 0
@@ -21,65 +20,88 @@ def read_file():
 
         # Se añaden al grafo la reglas de supervisión
 
-        califications = list(map(int, lines[i].split()))
+        calificaciones = list(map(int, lines[i].split()))
         i += 1
 
         # en la linea de calificaciones separa y convierte cada caracter en int con la funcion map
 
-        max_sumaVoraz(m, grafo, califications)
+        arbol_reglasSupervicion(m, grafo, calificaciones, funcion)
 
         # Se llama la funcion pasandole los datos del probloma para
         # resolver la maximizacion de las calificaciones
 
 
-def max_sumaVoraz(m, grafo, calificaciones):
+def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
+    reglas = {i: [] for i in range(m)}
+    tiene_supervisor = [False] * m
 
-    maxima_calificacion = max(calificaciones)
-    index_max = calificaciones.index(maxima_calificacion)
-    index_removed = set()
-    total_calificacions = 0
+    for supervisor, fila in enumerate(grafo):
+        for supervisado, relacion in enumerate(fila):
+            if relacion == 1:
+                reglas[supervisor].append(supervisado)
+                tiene_supervisor[supervisado] = True
 
-    rules = {i: int(0) for i in range(len(grafo))}
-    invitados = [0 for i in range(m)]
+    # Detectar raíz (el que no tiene padre) para el algoritmo dinamico
 
-    i = 0
-    nodo_actual = 0
-    while i < len(rules) - 1:
-        for index, rule in enumerate(grafo[nodo_actual]):
-            if rule > 0:
-                employable_supervised = grafo[nodo_actual].index(rule)
-                rules[nodo_actual] = employable_supervised
+    raiz = next(i for i, tiene in enumerate(tiene_supervisor) if not tiene)
 
-        nodo_actual += 1
-        i += 1
+    if funcion == "voraz":
+        return max_sumaVoraz(m, reglas, calificaciones)
+    elif funcion == "dinamica":
+        return max_sumaDinamica(raiz)
+    elif funcion == "bruta":
+        return max_sumaFuerzaBruta()
+
+
+def max_sumaVoraz(m, reglas, calificaciones):
+    maxima_calificacion = max(calificaciones)  # Escogemos el valor maximo de la lista calificaciones
+    index_maximo = calificaciones.index(
+        maxima_calificacion)  # Obtenemos su indice del empelado con el valor maximo para saber en que posicion se ubica en invitados
+    index_eliminados = set()  # Se añadiran al conjunto el supervisor y el subordinado del empleado con el valor maximo, para no invitarlos
+    suma_maxima = 0  # Se iran sumando las calificaciones de los empleados de mayor calificacion
+    invitados = [0] * m  # Lista del tamaño del numero de empleados, para la solucion optima
 
     while maxima_calificacion is not None:
 
-        total_calificacions += maxima_calificacion
-        invitados[index_max] = 1
+        if index_maximo in reglas[index_maximo]:
+            index_eliminados.add(index_maximo)
+            maxima_calificacion = max((v for i, v in enumerate(calificaciones) if i not in index_eliminados),
+                                      default=None)
+            if maxima_calificacion is None:
+                break
+            else:
+                indice_maximo = calificaciones.index(maxima_calificacion)
 
-        for key, value in rules.items():
+        # Se va sumando las calificaciones de los empleados con mayor calificacion
+        # Y se invitan
 
-            if key == index_max and value == index_max:
-                index_removed.add(key)
-                total_calificacions -= maxima_calificacion
-                invitados[index_max] = 0
-            elif value == index_max:
-                index_removed.add(key)
-            elif key == index_max:
-                index_removed.add(value)
+        suma_maxima += maxima_calificacion
+        invitados[index_maximo] = 1
 
-        index_removed.add(index_max)
+        # Verifica cuales son los subordinados del empleado con mayor calificacion
+        # Y los elimina para no invitarlos
 
-        maxima_calificacion = max((v for i, v in enumerate(calificaciones) if i not in index_removed),default=None)
+        for subordinados in reglas[index_maximo]:
+            index_eliminados.add(subordinados)
 
-        if maxima_calificacion is None:
-            break
-        index_max = calificaciones.index(maxima_calificacion)
+        # Verifica si el empleado con mayor calificacion tiene un supervisor
+        # Si si, elimina su supervisor
 
-        invitados.append(total_calificacions)
+        for supervisor, subordinado in reglas.items():
+            if index_maximo in subordinado:
+                index_eliminados.add(supervisor)
 
+        # Tambien elimina el empleado con mayor calificacion
+        # Para poder escoger el siguiente empleado con mayor calificacion
+        # filtrando los que estan eliminados
+
+        index_eliminados.add(index_maximo)
+        maxima_calificacion = max((v for i, v in enumerate(calificaciones) if i not in index_eliminados), default=None)
+
+    # Añadimos la suma_maxima que se obtuvo para construir y devolver la solucion optima
+    invitados.append(suma_maxima)
     return invitados
+
 
 def max_sumaDinamica(n, m, grafo, calification):
     pass
