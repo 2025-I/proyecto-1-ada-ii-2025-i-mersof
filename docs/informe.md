@@ -12,14 +12,14 @@ La salida esperada es una cadena palindrómica de máxima longitud, en minúscul
 
 ## Función de Normalización
 
-   python
-import unicodedata
-import re
+    python
+    import unicodedata
+    import re
 
-def normalize_text(text):
-    text = unicodedata.normalize('NFD', text)
-    text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
-    return re.sub(r'[^a-zA-Z0-9]', '', text).lower()
+    def normalize_text(text):
+        text = unicodedata.normalize('NFD', text)
+        text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
+        return re.sub(r'[^a-zA-Z0-9]', '', text).lower()
 
 ## Casos de Prueba
 Entrada de Ejemplo:
