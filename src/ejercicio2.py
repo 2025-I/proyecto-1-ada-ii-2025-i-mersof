@@ -1,10 +1,12 @@
+from itertools import combinations
+
 
 def read_file(funcion):
     file2 = "../entradas/file2.txt"
 
     with open(file2, "r") as f:
         lineas = [linea.strip() for linea in f.readlines() if linea.strip()]
-    print(lineas)
+
     i = 0
     n_problems = int(lineas[i])
     i += 1
@@ -35,8 +37,7 @@ def read_file(funcion):
 
 
 def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
-    # Genera un diccionario donde cada llave es un supervisor y una lista de values que son los subordinados
-    print(grafo)
+    # Genera un diccionario donde cada llave es un supervisor y una lista de values que son los subordinado
     reglas = {i: [] for i in range(m)}
     tiene_supervisor = [False] * m
 
@@ -50,7 +51,6 @@ def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
 
     # Detectar raíz (el empleado que no tiene supervisor) para el algoritmo dinamico
 
-
     if funcion == "voraz":
         print(reglas)
         return max_sumaVoraz(m, reglas, calificaciones)
@@ -58,11 +58,11 @@ def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
         raiz = next(i for i, tiene in enumerate(tiene_supervisor) if not tiene)
         return max_sumaDinamica(m, raiz, reglas, calificaciones)
     elif funcion == "bruta":
-        return 0
+        return max_sumaFuerzaBruta(m, reglas, calificaciones)
 
 
 def max_sumaVoraz(m, reglas, calificaciones):
-    print("entra voraz")
+
     maxima_calificacion = max(calificaciones)  # Escogemos el valor maximo de la lista calificaciones
     index_maximo = calificaciones.index(
         maxima_calificacion)  # Obtenemos su indice del empelado con el valor maximo para saber en que posicion se ubica en invitados
@@ -116,13 +116,14 @@ def max_sumaVoraz(m, reglas, calificaciones):
     return invitados
 
 
-#Enfoque TOP-DOWN -> Guarda resultados, para no volverlos a calcular
+# Enfoque TOP-DOWN -> Guarda resultados, para no volverlos a calcular
 
-dp = {} #Diccionario donde se guardan los resultados optimos de los subproblemas
-#subprolemas:
+dp = {}  # Diccionario donde se guardan los resultados optimos de los subproblemas
+
+
+# subprolemas:
 def max_sumaDinamica(m, raiz, reglas, calificaciones):
-
-    #Utilizamos esta funcion para recorrer desde abajo hacia arriba
+    # Utilizamos esta funcion para recorrer desde abajo hacia arriba
     def recorrido(nodo):
 
         no_invitado_empleado = 0
@@ -161,46 +162,39 @@ def max_sumaDinamica(m, raiz, reglas, calificaciones):
     print(invitados)
     return invitados
 
+
 def max_sumaFuerzaBruta(m, reglas, calificaciones):
 
-    # m -> numero de empleados
+    suma_maxima = 0
     mejor_combinacion = []
+    invitados = [0] * m
 
-    #Esta haciendo las combinaciones con cada empleado
-    #Compara si en los hijos de cada empleado2 esta el empleado1
+    def validar_combinacion(comb):
 
-    for supervisor in range(m): #de 0 ... 4       a
-        nodos_escogidos = [supervisor]
-        for subordinado in range(m): #de 0 ... 4
+        for i in comb:
+            for j in comb:
+                if i != j and j in reglas.get(i, []):
+                    return False
+        return True
 
-            for value in reglas.get(supervisor):
-                #comparar coon los hijos del supervisor
-                for i in reglas.get(subordinado):           #comparar con los hijos del subordinado
-                    #if i == supervisor: pass
-                    if supervisor != i: #si el nodo escogido (supervisor) no esta como subordinado/hijo de empleado2 ejemplo a no supervisa a
-                        if subordinado != value and supervisor != value: #Si j e i esta en los hijos de el nodo esocogido
-                            #if supervisor == subordinado:pass
-                            if supervisor != subordinado:  #i diferente de j para no agregarla a las combinaciones porque ya es nodo escogido, osea se repetiria otra vezz el nodo escogido
-                                if subordinado not in reglas.get(nodos_escogidos[-1]):
-                                    nodos_escogidos.append(subordinado)
+    for tamano in range(1, m + 1):
+        for comb in combinations(range(m), tamano):
+            if validar_combinacion(comb):
+                total = sum(calificaciones[i] for i in comb)
+                if total > suma_maxima:
+                    suma_maxima = total
+                    mejor_combinacion = comb
 
+    for _ in mejor_combinacion:
+        invitados[_] = 1
 
-                                #suma = calificaciones[supervisor] + calificaciones[subordinado]
-                                #mejor_combinacion.append([calificaciones[supervisor], calificaciones[subordinado],suma])
-        suma = 0
-        for s in nodos_escogidos:
-            suma += calificaciones[s]
-        nodos_escogidos.append(suma)
-        mejor_combinacion.append(nodos_escogidos)
-
-    print("mejor", mejor_combinacion)
-    #Comparo las sumas de cada combinacion oara elegir la maxima
-    maximoValor = 0;
-    invitado = [0] * m
-    for combinacion in mejor_combinacion:
-        if combinacion[-1] > maximoValor:
-            maximoValor = combinacion[-1]
+    invitados.append(suma_maxima)
+    print(invitados)
+    return invitados
 
 
 if __name__ == "__main__":
-    read_file("dinamica")
+    read_file("voraz")
+    #read_file("dinamica")
+    #read_file("bruta")
+
