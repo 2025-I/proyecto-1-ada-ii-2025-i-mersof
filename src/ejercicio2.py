@@ -1,11 +1,12 @@
+
 def read_file(funcion):
-    file2 = "file2.txt"
+    file2 = "../entradas/file2.txt"
 
-    with open(file2, 'r') as f:
-        lines = [linea.strip() for linea in f.readlines() if linea.strip()]
-
+    with open(file2, "r") as f:
+        lineas = [linea.strip() for linea in f.readlines() if linea.strip()]
+    print(lineas)
     i = 0
-    n_problems = int(lines[i])
+    n_problems = int(lineas[i])
     i += 1
 
     # Recorre de acuerdo a el numero de problemas y va guardando en cada uno:
@@ -15,19 +16,18 @@ def read_file(funcion):
 
     for n in range(n_problems):
 
-        m = int(lines[i])  # numero de empleados
+        m = int(lineas[i])  # numero de empleados
         i += 1
 
         grafo = []  # Genera la matriz de las reglas de supervision
         for _ in range(m):
-            grafo.append(lines[i].split())
+            grafo.append(list(map(int, lineas[i].split())))
             i += 1
 
         # Toma cada caracter de la linea y lo convierte en una lista de enteros separados con coma
-        calificaciones = list(map(int, lines[i].split()))
+        calificaciones = list(map(int, lineas[i].split()))
 
         i += 1
-
         arbol_reglasSupervicion(m, grafo, calificaciones, funcion)
 
         # Se llama la funcion pasandole los datos del problema para
@@ -36,29 +36,33 @@ def read_file(funcion):
 
 def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
     # Genera un diccionario donde cada llave es un supervisor y una lista de values que son los subordinados
+    print(grafo)
     reglas = {i: [] for i in range(m)}
     tiene_supervisor = [False] * m
 
     for supervisor, fila in enumerate(grafo):
+
         for supervisado, relacion in enumerate(fila):
+
             if relacion == 1:
                 reglas[supervisor].append(supervisado)
                 tiene_supervisor[supervisado] = True
 
     # Detectar raíz (el empleado que no tiene supervisor) para el algoritmo dinamico
 
-    raiz = next(i for i, tiene in enumerate(tiene_supervisor) if not tiene)
 
     if funcion == "voraz":
+        print(reglas)
         return max_sumaVoraz(m, reglas, calificaciones)
     elif funcion == "dinamica":
+        raiz = next(i for i, tiene in enumerate(tiene_supervisor) if not tiene)
         return max_sumaDinamica(m, raiz, reglas, calificaciones)
     elif funcion == "bruta":
-        return max_sumaFuerzaBruta()
+        return 0
 
 
 def max_sumaVoraz(m, reglas, calificaciones):
-
+    print("entra voraz")
     maxima_calificacion = max(calificaciones)  # Escogemos el valor maximo de la lista calificaciones
     index_maximo = calificaciones.index(
         maxima_calificacion)  # Obtenemos su indice del empelado con el valor maximo para saber en que posicion se ubica en invitados
@@ -74,9 +78,8 @@ def max_sumaVoraz(m, reglas, calificaciones):
                                       default=None)
             if maxima_calificacion is None:
                 break
-            else:
-                indice_maximo = calificaciones.index(maxima_calificacion)
-
+            index_maximo = calificaciones.index(maxima_calificacion)
+            continue
         # Se va sumando las calificaciones de los empleados con mayor calificacion
         # Y se invitan
 
@@ -103,9 +106,14 @@ def max_sumaVoraz(m, reglas, calificaciones):
         index_eliminados.add(index_maximo)
         maxima_calificacion = max((v for i, v in enumerate(calificaciones) if i not in index_eliminados), default=None)
 
+        if maxima_calificacion is not None:
+            index_maximo = calificaciones.index(maxima_calificacion)
+        else:
+            break
     # Añadimos la suma_maxima que se obtuvo para construir y devolver la solucion optima
     invitados.append(suma_maxima)
-    return invitados
+    print(invitados)
+
 
 #Enfoque TOP-DOWN -> Guarda resultados, para no volverlos a calcular
 
