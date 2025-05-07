@@ -41,13 +41,13 @@ Entrada de Ejemplo:
 
 Se exploran todas las posibles subsecuencias de la cadena usando recursión con memoización. Se conservan las palindrómicas y se retorna la de mayor longitud.
 
-    Complejidad temporal: O(2ⁿ)
+-**Complejidad temporal:** O(2ⁿ)
 
-    Complejidad espacial: O(2ⁿ)
+-**Complejidad espacial:** O(2ⁿ)
 
-    Ventajas: Útil para validación y comparación
+-**Ventajas:** Útil para validación y comparación
 
-    Limitación: Inviable para entradas mayores a 20-25 caracteres
+-**Limitación:**Inviable para entradas mayores a 20-25 caracteres
 
     def find_longest_palindromic_subsequence_brute(input_lines):
         def is_palindrome(s): return s == s[::-1]
@@ -68,13 +68,13 @@ Se exploran todas las posibles subsecuencias de la cadena usando recursión con 
 
 Se utiliza una matriz dp[i][j] donde cada celda guarda la longitud de la subsecuencia palindrómica más larga entre los índices i y j. Luego se reconstruye una solución válida usando backtracking y memoización.
 
-    Complejidad temporal: O(n²)
+-**Complejidad temporal:** O(n²)
 
-    Complejidad espacial: O(n²)
+-**Complejidad** espacial: O(n²)
 
-    Ventajas: Eficiente y encuentra todas las posibles subsecuencias de máxima longitud
+-**Ventajas:** Eficiente y encuentra todas las posibles subsecuencias de máxima longitud
 
-    Limitación: Mayor uso de memoria
+-**Limitación:** Mayor uso de memoria
 
     def find_longest_palindromic_subsequence_dp(input_lines):
         result = []
@@ -119,13 +119,13 @@ Se utiliza una matriz dp[i][j] donde cada celda guarda la longitud de la subsecu
 
 Se usa una técnica de expansión desde el centro para encontrar el substring palindrómico más largo. Aunque no garantiza la subsecuencia más larga, es muy eficiente.
 
-    Complejidad temporal: O(n²)
+-**Complejidad temporal:** O(n²)
 
-    Complejidad espacial: O(1)
+-**Complejidad espacial:** O(1)
 
-    Ventajas: Muy rápido
+-**Ventajas:** Muy rápido
 
-    Limitación: No encuentra subsecuencias, solo substrings
+-**Limitación:** No encuentra subsecuencias, solo substrings
 
     def find_longest_palindromic_subsequence_greedy(input_lines):
         def expand(s, l, r):
@@ -170,7 +170,9 @@ Se realizaron pruebas unitarias con distintos escenarios:
     | Voraz                         | O(n²), mejor caso O(n)| O(1)        | Rápido pero solo encuentra substrings palindrómicos (no subsecuencias generales) |
 
 ## Gráficas de Rendimiento
-    ![alt text](image-1.png)
+
+    ![Gráfica de tiempos promedio](../graficas/tiempo_promedio.png)
+
 
 **Se realizaron pruebas con entradas de:**
 
