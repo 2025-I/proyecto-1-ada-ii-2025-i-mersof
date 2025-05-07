@@ -1,9 +1,10 @@
 import unittest
 
 from src.ejercicio2 import arbol_reglasSupervicion
+from src.validar_tests import generar_arbol_lineal, validar_solucion
 
 
-class TestsFiestaCompañia(unittest.TestCase):
+class TestsFiestaCompania(unittest.TestCase):
 
     def test_tamano_5(self):
         m = 5
@@ -81,32 +82,6 @@ class TestsFiestaCompañia(unittest.TestCase):
         self.assertTrue(validar_solucion(m, grafo_50000, resultado_voraz))
         # self.assertTrue(validar_solucion(m, grafo_50000, resultado_dinamica))
 
-
-def generar_arbol_lineal(n):
-    grafo = [[0] * n for _ in range(n)]
-    for i in range(n - 1):
-        grafo[i][i + 1] = 1
-    return grafo
-
-
-def validar_solucion(m, grafo, invitados):
-    #return: True si es válida, False si hay conflictos
-
-    # Validar que todos los valores sean 0 o 1
-    for val in invitados[:m]:
-        if val not in (0, 1):
-            print("Valor inválido en 'invitados': debe ser solo 0 o 1")
-            return False
-
-    # Recorrer toda la matriz de adyacencia
-    for i in range(m):
-        for j in range(m):
-            if grafo[i][j] == 1:  # Si i supervisa a j
-                if invitados[i] == 1 and invitados[j] == 1:
-                    print(f"Conflicto: empleado {i} y su subordinado {j} están ambos invitados")
-                    return False
-
-    return True
 
 if __name__ == '__main__':
     unittest.main()

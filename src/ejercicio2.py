@@ -63,7 +63,6 @@ def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
 
 
 def max_sumaVoraz(m, reglas, calificaciones):
-
     maxima_calificacion = max(calificaciones)  # Escogemos el valor maximo de la lista calificaciones
     index_maximo = calificaciones.index(
         maxima_calificacion)  # Obtenemos su indice del empelado con el valor maximo para saber en que posicion se ubica en invitados
@@ -119,7 +118,7 @@ def max_sumaVoraz(m, reglas, calificaciones):
 
 # Enfoque TOP-DOWN -> Guarda resultados, para no volverlos a calcular
 
- # Diccionario donde se guardan los resultados optimos de los subproblemas
+# Diccionario donde se guardan los resultados optimos de los subproblemas
 
 
 # subprolemas:
@@ -145,7 +144,7 @@ def max_sumaDinamica(m, raiz, reglas, calificaciones):
 
             for subordinado in reglas[nodo]:
                 no_invitado += max(dp[subordinado])  # Máximo entre invitar o no al hijo
-                invitado += dp[subordinado][0]       # Si invitamos al padre, no al hijo
+                invitado += dp[subordinado][0]  # Si invitamos al padre, no al hijo
 
             dp[nodo] = (no_invitado, invitado)
 
@@ -171,7 +170,6 @@ def max_sumaDinamica(m, raiz, reglas, calificaciones):
 
 
 def max_sumaFuerzaBruta(m, reglas, calificaciones):
-
     suma_maxima = 0
     mejor_combinacion = []
     invitados = [0] * m
@@ -202,6 +200,5 @@ def max_sumaFuerzaBruta(m, reglas, calificaciones):
 
 if __name__ == "__main__":
     read_file("voraz")
-    #read_file("dinamica")
-    #read_file("bruta")
-
+    # read_file("dinamica")
+    # read_file("bruta")
