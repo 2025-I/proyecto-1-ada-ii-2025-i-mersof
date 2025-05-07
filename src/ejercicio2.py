@@ -113,6 +113,7 @@ def max_sumaVoraz(m, reglas, calificaciones):
     # Añadimos la suma_maxima que se obtuvo para construir y devolver la solucion optima
     invitados.append(suma_maxima)
     print(invitados)
+    return invitados
 
 
 #Enfoque TOP-DOWN -> Guarda resultados, para no volverlos a calcular
@@ -157,11 +158,49 @@ def max_sumaDinamica(m, raiz, reglas, calificaciones):
     suma_maxima = sum(calificaciones[i] for i in range(m) if invitados[i] == 1)
 
     invitados.append(suma_maxima)
+    print(invitados)
     return invitados
 
-def max_sumaFuerzaBruta(n, m, grafo, calification):
-    pass
+def max_sumaFuerzaBruta(m, reglas, calificaciones):
+
+    # m -> numero de empleados
+    mejor_combinacion = []
+
+    #Esta haciendo las combinaciones con cada empleado
+    #Compara si en los hijos de cada empleado2 esta el empleado1
+
+    for supervisor in range(m): #de 0 ... 4       a
+        nodos_escogidos = [supervisor]
+        for subordinado in range(m): #de 0 ... 4
+
+            for value in reglas.get(supervisor):
+                #comparar coon los hijos del supervisor
+                for i in reglas.get(subordinado):           #comparar con los hijos del subordinado
+                    #if i == supervisor: pass
+                    if supervisor != i: #si el nodo escogido (supervisor) no esta como subordinado/hijo de empleado2 ejemplo a no supervisa a
+                        if subordinado != value and supervisor != value: #Si j e i esta en los hijos de el nodo esocogido
+                            #if supervisor == subordinado:pass
+                            if supervisor != subordinado:  #i diferente de j para no agregarla a las combinaciones porque ya es nodo escogido, osea se repetiria otra vezz el nodo escogido
+                                if subordinado not in reglas.get(nodos_escogidos[-1]):
+                                    nodos_escogidos.append(subordinado)
+
+
+                                #suma = calificaciones[supervisor] + calificaciones[subordinado]
+                                #mejor_combinacion.append([calificaciones[supervisor], calificaciones[subordinado],suma])
+        suma = 0
+        for s in nodos_escogidos:
+            suma += calificaciones[s]
+        nodos_escogidos.append(suma)
+        mejor_combinacion.append(nodos_escogidos)
+
+    print("mejor", mejor_combinacion)
+    #Comparo las sumas de cada combinacion oara elegir la maxima
+    maximoValor = 0;
+    invitado = [0] * m
+    for combinacion in mejor_combinacion:
+        if combinacion[-1] > maximoValor:
+            maximoValor = combinacion[-1]
 
 
 if __name__ == "__main__":
-    read_file("voraz")
+    read_file("dinamica")
