@@ -24,18 +24,18 @@ La salida esperada es una cadena palindrómica de máxima longitud, en minúscul
 ## Casos de Prueba
 Entrada de Ejemplo:
 
-3
-Llego a tierra y le dijo: Dabale arroz a la zorra el abad, ella aceptó
-El ministro dijo Se es o no se es un ministro
-Maria dijo Yo dono rosas, oro no doy por ello el la dejo
+    3
+    Llego a tierra y le dijo: Dabale arroz a la zorra el abad, ella aceptó
+    El ministro dijo Se es o no se es un ministro
+    Maria dijo Yo dono rosas, oro no doy por ello el la dejo
 
-Salida Esperada:
+**Salida Esperada:**
 
-dabalearrozalzorraelabad
-seesonoses
-yonodonorosasoronodoy
+    dabalearrozalzorraelabad
+    seesonoses
+    yonodonorosasoronodoy
 
-Soluciones Implementadas
+    Soluciones Implementadas
 
 ## Fuerza Bruta 
 
@@ -159,7 +159,7 @@ Se realizaron pruebas unitarias con distintos escenarios:
 
     -Con palíndromo interno
 
-** Se usó el módulo unittest de Python para asegurar entrada vs salida.** 
+**Se usó el módulo unittest de Python para asegurar entrada vs salida.** 
  
 ## Comparación de Complejidades
  
@@ -172,7 +172,7 @@ Se realizaron pruebas unitarias con distintos escenarios:
 ## Gráficas de Rendimiento
     ![alt text](image-1.png)
 
-** Se realizaron pruebas con entradas de: **
+**Se realizaron pruebas con entradas de:**
 
     -10 caracteres (juguete)
 
