@@ -1,5 +1,5 @@
-# Ejercicio 1: Subsecuencias Palindrómicas Más Largas 
- 
+# Ejercicio 1: Subsecuencias Palindrómicas Más Largas
+
 ## Descripción del Problema
 
 Dada una cadena de caracteres, se busca encontrar todas las subsecuencias palindrómicas de máxima longitud. Antes del procesamiento, la cadena es normalizada:
@@ -12,7 +12,7 @@ La salida esperada es una cadena palindrómica de máxima longitud, en minúscul
 
 ## Función de Normalización
 
-```python
+   python
 import unicodedata
 import re
 
@@ -21,7 +21,7 @@ def normalize_text(text):
     text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
     return re.sub(r'[^a-zA-Z0-9]', '', text).lower()
 
-Casos de Prueba
+## Casos de Prueba
 Entrada de Ejemplo:
 
 3
@@ -36,7 +36,8 @@ seesonoses
 yonodonorosasoronodoy
 
 Soluciones Implementadas
-Fuerza Bruta
+
+## Fuerza Bruta 
 
 Se exploran todas las posibles subsecuencias de la cadena usando recursión con memoización. Se conservan las palindrómicas y se retorna la de mayor longitud.
 
@@ -63,7 +64,7 @@ def find_longest_palindromic_subsequence_brute(input_lines):
         result.append(best)
     return result
 
-Programación Dinámica
+## Programación Dinámica
 
 Se utiliza una matriz dp[i][j] donde cada celda guarda la longitud de la subsecuencia palindrómica más larga entre los índices i y j. Luego se reconstruye una solución válida usando backtracking y memoización.
 
@@ -114,7 +115,7 @@ def find_longest_palindromic_subsequence_dp(input_lines):
         result.append(''.join(res))
     return result
 
-Algoritmo Voraz
+## Algoritmo Voraz
 
 Se usa una técnica de expansión desde el centro para encontrar el substring palindrómico más largo. Aunque no garantiza la subsecuencia más larga, es muy eficiente.
 
@@ -144,22 +145,24 @@ def find_longest_palindromic_subsequence_greedy(input_lines):
         result.append(best)
     return result
 
-Validación mediante Tests Unitarios
+## Validación mediante Tests Unitarios
 
 Se realizaron pruebas unitarias con distintos escenarios:
 
-    Frases típicas
+    -Frases típicas
 
-    Palíndromos perfectos
+    -Palíndromos perfectos
 
-    Casos vacíos
+    -Casos vacíos
 
-    Sin palíndromo claro
+    -Sin palíndromo claro
 
-    Con palíndromo interno
+    -Con palíndromo interno
 
-Se usó el módulo unittest de Python para asegurar entrada vs salida.
-Comparación de Complejidades
+** Se usó el módulo unittest de Python para asegurar entrada vs salida.** 
+ 
+## Comparación de Complejidades
+ 
 Enfoque	Tiempo Estimado	Espacio	Observaciones
 Fuerza Bruta	O(2ⁿ)	O(2ⁿ)	Muy lento en cadenas largas
 Programación Dinámica	O(n²)	O(n²)	Equilibrado, encuentra solución óptima
@@ -168,16 +171,17 @@ Gráficas de Rendimiento
 
 Se realizaron pruebas con entradas de:
 
-    10 caracteres (juguete)
+    -10 caracteres (juguete)
 
-    100 caracteres (pequeña)
+    -100 caracteres (pequeña)
 
-    1000 caracteres (mediana)
+    -1000 caracteres (mediana)
 
-    10000 caracteres (grande)
+    -10000 caracteres (grande)
 
 Cada prueba se ejecutó 5 veces y se promedió el tiempo. Las gráficas se generaron con graficar_resultados.py y se incluyen en la carpeta ../graficas/tiempo_promedio.png.
-Conclusión
+
+## Conclusión
 
 La solución por programación dinámica es la más adecuada para resolver el problema con precisión y eficiencia.
 
