@@ -59,7 +59,7 @@ def graficas(resultados):
 
     # Crear gráfica de barras
     plt.figure(figsize=(8, 5))
-    barras = plt.bar(etiquetas, tiempos, color=["#4E79A7", "#F28E2B", #])
+    barras = plt.bar(etiquetas, tiempos, color=["#4E79A7", "#F28E2B", "#f71f1f"])
 
     # Títulos y etiquetas
     plt.xlabel("Estrategias")
