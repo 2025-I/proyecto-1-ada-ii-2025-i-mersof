@@ -61,7 +61,6 @@ def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
     elif funcion == "bruta":
         return max_sumaFuerzaBruta(m, reglas, calificaciones)
 
-
 def max_sumaVoraz(m, reglas, calificaciones):
     maxima_calificacion = max(calificaciones)  # Escogemos el valor maximo de la lista calificaciones
     index_maximo = calificaciones.index(
@@ -120,8 +119,6 @@ def max_sumaVoraz(m, reglas, calificaciones):
 
 # Diccionario donde se guardan los resultados optimos de los subproblemas
 
-
-# subprolemas:
 def max_sumaDinamica(m, raiz, reglas, calificaciones):
     dp = {}
     # Utilizamos esta funcion para recorrer desde abajo hacia arriba
