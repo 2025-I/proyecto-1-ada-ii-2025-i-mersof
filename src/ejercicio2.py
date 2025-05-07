@@ -1,10 +1,10 @@
 from itertools import combinations
+from tkinter import filedialog as fd
 
 def read_file(funcion):
-    file2 = "../entradas/file2.txt"
 
-    with open(file2, "r") as f:
-        lineas = [linea.strip() for linea in f.readlines() if linea.strip()]
+    file2 = fd.askopenfile()
+    lineas = [linea.strip() for linea in file2.readlines() if linea.strip()]
 
     i = 0
     n_problems = int(lineas[i])
