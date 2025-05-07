@@ -1,51 +1,109 @@
 import pytest
-import time 
-from src.ejercicio1 import resolver_dinamico, resolver_fuerza_bruta, resolver_voraz
+from src.ejercicio1 import normalize_text, find_longest_palindromic_subsequence_dp, find_longest_palindromic_subsequence_brute, find_longest_palindromic_subsequence_greedy
 
-# Función auxiliar para guardar resultados en un archivo
-def guardar_resultados(algoritmo, tamano, tiempo, resultado):
-    with open("resultados_pruebas.txt", "a") as f:
-        f.write(f"Algoritmo: {algoritmo}, Tamaño: {tamano}, Tiempo: {tiempo:.6f} segundos, Resultado: {len(resultado)} caracteres\n")
+def test_cadenas_con_numeros():
+    entradas = ["abc123321cba"]
+    resultado_dinamico = find_longest_palindromic_subsequence_dp([str(len(entradas))] + entradas)
+    resultado_voraz = find_longest_palindromic_subsequence_greedy([str(len(entradas))] + entradas)
+    resultado_fuerza_bruta = find_longest_palindromic_subsequence_brute([str(len(entradas))] + entradas)
 
-# Datos de prueba (ahora más complejos y grandes)
-pruebas = [
-    ("Pequeña", ["abc" * i for i in range(1, 101)]),    # Entrada pequeña, cadenas con longitud de 3 a 300
-    ("Mediana", ["abc" * i for i in range(1, 1001)]),   # Entrada mediana, cadenas de 3 a 3000
-    ("Grande", ["abc" * i for i in range(1, 10001)]),   # Entrada grande, cadenas de 3 a 30000
-    ("Extra Grande", ["abc" * i for i in range(1, 50001)]) # Entrada extra grande, cadenas de 3 a 150000
-]
+    assert resultado_dinamico[0] == "abc123321cba"
+    assert resultado_voraz[0] == "abc123321cba"
+    assert resultado_fuerza_bruta[0] == "abc123321cba"
 
-# Prueba para los tres algoritmos con una sola entrada
-@pytest.mark.parametrize("tamano, lineas", pruebas)
-def test_algoritmos_completos(tamano, lineas):
-    # =======================
-    # Test para Programación Dinámica
-    start_time = time.time()
-    resultado_dinamico = resolver_dinamico(lineas)
-    tiempo_dinamico = time.time() - start_time
-    guardar_resultados("Programación Dinámica", tamano, tiempo_dinamico, resultado_dinamico)
-    
-    # =======================
-    # Test para Fuerza Bruta
-    start_time = time.time()
-    resultado_fuerza_bruta = resolver_fuerza_bruta(lineas)
-    tiempo_fuerza_bruta = time.time() - start_time
-    guardar_resultados("Fuerza Bruta", tamano, tiempo_fuerza_bruta, resultado_fuerza_bruta)
-    
-    # =======================
-    # Test para Algoritmo Voraz
-    start_time = time.time()
-    resultado_voraz = resolver_voraz(lineas)
-    tiempo_voraz = time.time() - start_time
-    guardar_resultados("Voraz", tamano, tiempo_voraz, resultado_voraz)
 
-    # =======================
-    # Assert para verificar que todos los algoritmos devuelven un resultado
-    assert len(resultado_dinamico) > 0
-    assert len(resultado_fuerza_bruta) > 0
-    assert len(resultado_voraz) > 0
+def test_con_acentos_y_mayusculas():
+    entradas = ["Ana"]
+    resultado_dinamico = find_longest_palindromic_subsequence_dp([str(len(entradas))] + entradas)
+    resultado_voraz = find_longest_palindromic_subsequence_greedy([str(len(entradas))] + entradas)
+    resultado_fuerza_bruta = find_longest_palindromic_subsequence_brute([str(len(entradas))] + entradas)
 
-    # Verificar que los resultados sean consistentes (aunque cada algoritmo podría tener un enfoque distinto)
-    assert resultado_dinamico == resultado_fuerza_bruta == resultado_voraz, "Los resultados no coinciden"
+    assert resultado_dinamico[0] == "ana"
+    assert resultado_voraz[0] == "ana"
+    assert resultado_fuerza_bruta[0] == "ana"
 
+
+def test_frases():
+    entradas = ["Daba leer arroz a la zorra, la zorra a leer daba."]
+    resultado_voraz = find_longest_palindromic_subsequence_greedy([str(len(entradas))] + entradas)
+    resultado_fuerza_bruta = find_longest_palindromic_subsequence_brute([str(len(entradas))] + entradas)
+
+    assert resultado_voraz[0] == "dabalearrozalazorraelabad"
+    assert resultado_fuerza_bruta[0] == "dabalearrozalazorraelabad"
+
+
+def test_palabras_comunes():
+    entradas = ["Reconocer"]
+    resultado_dinamico = find_longest_palindromic_subsequence_dp([str(len(entradas))] + entradas)
+    resultado_voraz = find_longest_palindromic_subsequence_greedy([str(len(entradas))] + entradas)
+    resultado_fuerza_bruta = find_longest_palindromic_subsequence_brute([str(len(entradas))] + entradas)
+
+    assert resultado_dinamico[0] == "reconocer"
+    assert resultado_voraz[0] == "reconocer"
+    assert resultado_fuerza_bruta[0] == "reconocer"
+
+
+def test_frase_con_puntuacion_compleja():
+    entradas = ["¡Anita lava la tina! La tina la lava Anita!"]
+    resultado_dinamico = find_longest_palindromic_subsequence_dp([str(len(entradas))] + entradas)
+    resultado_voraz = find_longest_palindromic_subsequence_greedy([str(len(entradas))] + entradas)
+    resultado_fuerza_bruta = find_longest_palindromic_subsequence_brute([str(len(entradas))] + entradas)
+
+    assert resultado_dinamico[0] == "anitavalatina"
+    assert resultado_voraz[0] == "anitavalatina"
+    assert resultado_fuerza_bruta[0] == "anitavalatina"
+
+
+def test_palindromo_largo_con_mayusculas_y_acentos():
+    entradas = ["Reina consorte de España, amada, sana, España de consorte reina."]
+    resultado_dinamico = find_longest_palindromic_subsequence_dp([str(len(entradas))] + entradas)
+    resultado_voraz = find_longest_palindromic_subsequence_greedy([str(len(entradas))] + entradas)
+    resultado_fuerza_bruta = find_longest_palindromic_subsequence_brute([str(len(entradas))] + entradas)
+
+    assert resultado_dinamico[0] == "reinaconsortedespanaamadasanaespanadesorentr"
+    assert resultado_voraz[0] == "reinaconsortedespanaamadasanaespanadesorentr"
+    assert resultado_fuerza_bruta[0] == "reinaconsortedespanaamadasanaespanadesorentr"
+
+
+def test_frase_con_caracteres_especiales():
+    entradas = ["Eva, ¿sabes qué te pasa? No te atrevas a pasarte."]
+    resultado_dinamico = find_longest_palindromic_subsequence_dp([str(len(entradas))] + entradas)
+    resultado_voraz = find_longest_palindromic_subsequence_greedy([str(len(entradas))] + entradas)
+    resultado_fuerza_bruta = find_longest_palindromic_subsequence_brute([str(len(entradas))] + entradas)
+
+    assert resultado_dinamico[0] == "evasabesteapasanoteatrevasapasarte"
+    assert resultado_voraz[0] == "evasabesteapasanoteatrevasapasarte"
+    assert resultado_fuerza_bruta[0] == "evasabesteapasanoteatrevasapasarte"
+
+
+def test_frase_con_palabras_intercaladas():
+    entradas = ["La red de redes está conectada a través de la red."]
+    resultado_dinamico = find_longest_palindromic_subsequence_dp([str(len(entradas))] + entradas)
+    resultado_voraz = find_longest_palindromic_subsequence_greedy([str(len(entradas))] + entradas)
+    resultado_fuerza_bruta = find_longest_palindromic_subsequence_brute([str(len(entradas))] + entradas)
+
+    assert resultado_dinamico[0] == "laredederedessconectadaatrevedelared"
+    assert resultado_voraz[0] == "laredederedessconectadaatrevedelared"
+    assert resultado_fuerza_bruta[0] == "laredederedessconectadaatrevedelared"
+
+
+def test_frase_con_subcadenas_palindromicas():
+    entradas = ["Yo dono el que dona hoy."]
+    resultado_dinamico = find_longest_palindromic_subsequence_dp([str(len(entradas))] + entradas)
+    resultado_voraz = find_longest_palindromic_subsequence_greedy([str(len(entradas))] + entradas)
+    resultado_fuerza_bruta = find_longest_palindromic_subsequence_brute([str(len(entradas))] + entradas)
+
+    assert resultado_dinamico[0] == "yodonelquedonahoy"
+    assert resultado_voraz[0] == "yodonelquedonahoy"
+    assert resultado_fuerza_bruta[0] == "yodonelquedonahoy"
  
+
+def test_palindromo_muy_largo():
+    entradas = ["Anita atina la palindromicidad de los datos. ¿Por qué la respuesta no es rápida?"]
+    resultado_dinamico = find_longest_palindromic_subsequence_dp([str(len(entradas))] + entradas)
+    resultado_voraz = find_longest_palindromic_subsequence_greedy([str(len(entradas))] + entradas)
+    resultado_fuerza_bruta = find_longest_palindromic_subsequence_brute([str(len(entradas))] + entradas)
+
+    assert resultado_dinamico[0] == "anitaatinalapalindromicidaddelosdatosporkuelarespuestanoresrapida"
+    assert resultado_voraz[0] == "anitaatinalapalindromicidaddelosdatosporkuelarespuestanoresrapida"
+    assert resultado_fuerza_bruta[0] == "anitaatinalapalindromicidaddelosdatosporkuelarespuestanoresrapida"

@@ -1,213 +1,162 @@
-import tkinter as tk 
+import re
+import tkinter as tk
 from tkinter import filedialog
 import unicodedata
-import re
-import time
-
-# ==============================
-# FUNCIONES AUXILIARES
-# ==============================
-
-def normalizar(cadena):
-    """Normaliza la cadena: sin acentos, minúsculas, solo letras y números."""
-    cadena = cadena.lower()
-    cadena = ''.join(
-        c for c in unicodedata.normalize('NFD', cadena)
-        if unicodedata.category(c) != 'Mn'
-    )
-    cadena = re.sub(r'[^a-z0-9]', '', cadena)
-    return cadena
-
-
-# ==============================
-# PROGRAMACIÓN DINÁMICA
-# ==============================
-
-def palindromo_mas_largo(cadena):
-    n = len(cadena)
-    dp = [[0] * n for _ in range(n)]
-    for i in range(n):
-        dp[i][i] = 1
-    for l in range(2, n + 1):
-        for i in range(n - l + 1):
-            j = i + l - 1
-            if cadena[i] == cadena[j]:
-                dp[i][j] = 2 + dp[i+1][j-1] if l > 2 else 2
-            else:
-                dp[i][j] = max(dp[i+1][j], dp[i][j-1])
-    return dp 
-
-def reconstruir_palindromo(cadena, dp):
-    n = len(cadena)
-    memo = {}
-
-    def helper(i, j):
-        if i > j: return {""}
-        if i == j: return {cadena[i]}
-        if (i, j) in memo: return memo[(i, j)]
-
-        res = set()
-        if cadena[i] == cadena[j] and dp[i][j] == dp[i+1][j-1] + 2:
-            for mid in helper(i+1, j-1):
-                res.add(cadena[i] + mid + cadena[j])
-        if dp[i+1][j] == dp[i][j]:
-            res.update(helper(i+1, j))
-        if dp[i][j-1] == dp[i][j]:
-            res.update(helper(i, j-1))
-
-        memo[(i, j)] = res
-        return res
-
-    posibles = helper(0, n - 1)
-    max_len = max(len(p) for p in posibles)
-    return min(p for p in posibles if len(p) == max_len)
-
  
-def resolver_dinamico(lineas):
-    n = int(lineas[0])
-    resultados = []
-    for i in range(1, n + 1):
-        normal = normalizar(lineas[i])
-        if not normal:
-            resultados.append("")
-            continue
-        dp = palindromo_mas_largo(normal)
-        resultados.append(reconstruir_palindromo(normal, dp))
-    return resultados
+# Normalizar la cadena: eliminar caracteres no alfabéticos y convertir a minúsculas
 
+def normalize_text(text: str) -> str:
+    # Normalización Unicode para quitar acentos
+    text = unicodedata.normalize('NFD', text)  # Descompone los caracteres con acentos
+    text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')  # Elimina los caracteres de acento
+    
+    # Eliminar todo lo que no sea alfabético y convertir a minúsculas
+    return re.sub(r'[^a-zA-Z]', '', text).lower()
 
-# ==============================
-# FUERZA BRUTA
-# ==============================
-
-def generar_palindromos(cadena):
-    memo = {}
-
-    def helper(i, j):
-        if i > j: return {""}
-        if i == j: return {cadena[i]}
-        if (i, j) in memo: return memo[(i, j)]
-        res = set()
-        if cadena[i] == cadena[j]:
-            for mid in helper(i+1, j-1):
-                res.add(cadena[i] + mid + cadena[j])
-        res.update(helper(i+1, j))
-        res.update(helper(i, j-1))
-        memo[(i, j)] = res
-        return res
-
-    posibles = helper(0, len(cadena) - 1)
-    max_len = max((len(p) for p in posibles), default=0)
-    return min((p for p in posibles if len(p) == max_len), default="")
-
-
-def resolver_fuerza_bruta(lineas):
-    n = int(lineas[0])
-    resultados = []
-    for i in range(1, n + 1):
-        normal = normalizar(lineas[i])
-        if not normal:
-            resultados.append("")
-            continue
-        resultados.append(generar_palindromos(normal))
-    return resultados
-
-
-# ==============================
-# VORAZ
-# ==============================
-
-def voraz(cadena):
-    mejor = ""
-    def expandir(i, j):
-        while i >= 0 and j < len(cadena) and cadena[i] == cadena[j]:
-            i -= 1
-            j += 1
-        return cadena[i+1:j]
-
-    for i in range(len(cadena)):
-        p1 = expandir(i, i)
-        p2 = expandir(i, i + 1)
-        mejor = max(mejor, p1, p2, key=len)
-
-    return mejor
-
-def resolver_voraz(lineas):
-    n = int(lineas[0])
-    resultados = []
-    for i in range(1, n + 1):
-        normal = normalizar(lineas[i])
-        if not normal:
-            resultados.append("")
-            continue
-        resultados.append(voraz(normal))
-    return resultados
-
-
-# ==============================
-# ARCHIVOS
-# ==============================
-
-def seleccionar_archivo():
-    raiz = tk.Tk()
-    raiz.withdraw()
-    ruta = filedialog.askopenfilename(
-        title="Selecciona el archivo de entrada",
-        filetypes=[("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")]
-    )
-    if not ruta:
-        raise FileNotFoundError("No se seleccionó archivo.")
-    with open(ruta, "r", encoding="utf-8") as f:
-        return f.read().splitlines()
-
-def guardar_resultados(resultados):
-    raiz = tk.Tk()
-    raiz.withdraw()
-    ruta = filedialog.asksaveasfilename(
-        title="Guardar resultados como...",
-        defaultextension=".txt",
-        filetypes=[("Archivos de texto", "*.txt"), ("Todos los archivos", "*.*")]
-    )
-    if not ruta:
-        print("No se guardó ningún archivo.")
-        return
-    with open(ruta, "w", encoding="utf-8") as f:
-        for r in resultados:
-            f.write(r + "\n")
-    print(f"Resultados guardados en: {ruta}")
-
-
-# ==============================
-# MAIN
-# ==============================
-
-if __name__ == "__main__":
+# Función de programación dinámica (LPS)
+def find_longest_palindromic_subsequence_dp(input_lines: list[str]) -> list[str]:
     try:
-        lineas = seleccionar_archivo()
-    except FileNotFoundError as e:
-        print(e)
-        exit()
+        num_lines = int(input_lines[0])
+        phrases = input_lines[1 : 1 + num_lines]
+    except ValueError:
+        phrases = input_lines
 
-    print("=== Selecciona el algoritmo ===")
-    print("1. Programación Dinámica")
-    print("2. Fuerza Bruta")
-    print("3. Voraz")
+    result = []
+    for phrase in phrases:
+        normalized_phrase = normalize_text(phrase)
+        length = len(normalized_phrase)
+        if length == 0:
+            result.append("")
+            continue
+ 
+        # P[i][j] = True si normalized_phrase[i..j] es palíndromo
+        dp_table = [[False] * length for _ in range(length)]
+        start_index, max_length = 0, 1
 
-    opcion = input("Opción (1/2/3): ").strip()
-    if opcion == "1":
-        resultados = resolver_dinamico(lineas)
-    elif opcion == "2":
-        resultados = resolver_fuerza_bruta(lineas)
-    elif opcion == "3":
-        resultados = resolver_voraz(lineas)
-    else:
-        print("Opción no válida.")
-        exit()
+        # Longitud 1
+        for i in range(length):
+            dp_table[i][i] = True
 
-    print("\n--- RESULTADOS ---")
-    for r in resultados:
-        print(r)
+        # Longitud 2
+        for i in range(length - 1):
+            if normalized_phrase[i] == normalized_phrase[i + 1]:
+                dp_table[i][i + 1] = True
+                start_index, max_length = i, 2
 
-    guardar = input("\n¿Deseas guardar los resultados en un archivo? (s/n): ").strip().lower()
-    if guardar == "s":
-        guardar_resultados(resultados)
+        # Longitud ≥ 3
+        for sub_length in range(3, length + 1):
+            for i in range(0, length - sub_length + 1):
+                j = i + sub_length - 1
+                if normalized_phrase[i] == normalized_phrase[j] and dp_table[i + 1][j - 1]:
+                    dp_table[i][j] = True
+                    if sub_length > max_length:
+                        start_index, max_length = i, sub_length
+
+        # Extraer la subcadena óptima
+        result.append(normalized_phrase[start_index : start_index + max_length])
+
+    return result
+
+# Función fuerza bruta para encontrar la subsecuencia palíndroma más larga
+def find_longest_palindromic_subsequence_brute(input_lines: list[str]) -> list[str]:
+    def is_palindrome(substring: str) -> bool:
+        return substring == substring[::-1]
+
+    try:
+        num_lines = int(input_lines[0])
+        phrases = input_lines[1 : 1 + num_lines]
+    except ValueError:
+        phrases = input_lines
+
+    result = []
+    for phrase in phrases:
+        normalized_phrase = normalize_text(phrase)
+        best_palindrome = ""
+        length = len(normalized_phrase)
+        # Genera todos los pares (i,j)
+        for i in range(length):
+            for j in range(i, length):
+                substring = normalized_phrase[i : j + 1]
+                if is_palindrome(substring) and len(substring) > len(best_palindrome):
+                    best_palindrome = substring
+        result.append(best_palindrome)
+    return result
+
+# Función voraz para encontrar la subsecuencia palíndroma más larga
+def find_longest_palindromic_subsequence_greedy(input_lines: list[str]) -> list[str]:
+    try:
+        num_lines = int(input_lines[0])
+        phrases = input_lines[1 : 1 + num_lines]
+    except ValueError:
+        phrases = input_lines
+
+    def expand_palindrome(text, left, right):
+        while left >= 0 and right < len(text) and text[left] == text[right]:
+            left -= 1
+            right += 1
+        # al salir, [left+1:right] es palíndromo
+        return text[left + 1 : right]
+
+    result = []
+    for phrase in phrases:
+        normalized_phrase = normalize_text(phrase)
+        best_palindrome = ""
+        for i in range(len(normalized_phrase)):
+            # impar
+            p1 = expand_palindrome(normalized_phrase, i, i)
+            if len(p1) > len(best_palindrome):
+                best_palindrome = p1
+            # par
+            p2 = expand_palindrome(normalized_phrase, i, i + 1)
+            if len(p2) > len(best_palindrome):
+                best_palindrome = p2
+        result.append(best_palindrome)
+    return result
+
+# Función para seleccionar un archivo
+def choose_file():
+    root = tk.Tk()
+    root.withdraw()  # Oculta la ventana principal
+    file_path = filedialog.askopenfilename(title="Selecciona un archivo .txt", filetypes=[("Text files", "*.txt")])
+    return file_path
+
+# Función principal para leer la entrada desde un archivo y ejecutar las técnicas
+def main():
+    # Selección del archivo
+    file_path = choose_file()
+    if not file_path:
+        print("No se seleccionó ningún archivo.")
+        return
+    
+    # Lectura del archivo
+    with open(file_path, 'r', encoding='utf-8') as file:
+        input_lines = file.readlines()
+
+    # Asegurarse de que la primera línea contenga un número válido
+    try:
+        num_lines = int(input_lines[0].strip())  # Número de cadenas a procesar
+    except ValueError:
+        print("El archivo no tiene el formato correcto.")
+        return
+
+    # Llamar a las funciones para cada técnica
+    result_dp = find_longest_palindromic_subsequence_dp([str(num_lines)] + input_lines[1:])
+    result_brute = find_longest_palindromic_subsequence_brute([str(num_lines)] + input_lines[1:])
+    result_greedy = find_longest_palindromic_subsequence_greedy([str(num_lines)] + input_lines[1:])
+
+    # Imprimir los resultados
+    print("Resultados con programación dinámica:")
+    for res in result_dp:
+        print(res)
+
+    print("\nResultados con fuerza bruta:")
+    for res in result_brute:
+        print(res)
+
+    print("\nResultados con enfoque voraz:")
+    for res in result_greedy:
+        print(res)
+
+# Ejecutar el programa
+if __name__ == "__main__":
+    main()
