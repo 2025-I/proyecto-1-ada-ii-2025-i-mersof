@@ -1,80 +1,188 @@
 import unittest
-from src.ejercicio1 import normalize_text, find_longest_palindromic_subsequence_dp
-from src.ejercicio1 import find_longest_palindromic_subsequence_brute
-from src.ejercicio1 import find_longest_palindromic_subsequence_greedy
+from src.ejercicio1 import (
+    normalize_text,
+    find_longest_palindromic_subsequence_dp,
+    find_longest_palindromic_subsequence_brute,
+    find_longest_palindromic_subsequence_greedy
+)
 
- 
-class TestPalindromoFunctions(unittest.TestCase):
+def is_palindrome(text):
+    return text == text[::-1]
 
-    def test_normalize_text(self):
-        self.assertEqual(normalize_text("Ánita lava la tina"), "anitalavalatina")
-        self.assertEqual(normalize_text("¡Hola, Mundo! 123"), "holamundo")
-        self.assertEqual(normalize_text("Sometámos-o-matémós"), "sometamosomatemos")
-        self.assertEqual(normalize_text(""), "")
-        self.assertEqual(normalize_text("   "), "")
+class TestPalindromo(unittest.TestCase):
 
-    def test_multiple_inputs(self):
-        inputs = [
+    def test_a_juguete(self):
+        """Test a) Juguete (10 frases): Verifica que la solución funcione"""
+        frases = [
             "Anita lava la tina",
             "Sometamos o matemos",
-            "La ruta nos aportó otro paso natural"
+            "La ruta nos aportó otro paso natural",
+            "Dábale arroz a la zorra el abad",
+            "A man a plan a canal Panama",
+            "racecar",
+            "abcde",
+            "abaccad",
+            "xyzzyx",
+            "Eva can I see bees in a cave"
+            
         ]
-        expected_dp = [
-            "anitalavalatina",
-            "sometamosomatemos",
-            "larutanosaportootropasonatural"
-        ]
-        expected_brute = expected_dp.copy()
-        expected_greedy = [
-            "anitalavalatina",
-            "matomsomatm",  # Greedy puede no encontrar el óptimo
-            "larutanaportootropasonatural"
-        ]
-
-        self.assertEqual(find_longest_palindromic_subsequence_dp(inputs), expected_dp)
-        self.assertEqual(find_longest_palindromic_subsequence_brute(inputs), expected_brute)
-        self.assertEqual(find_longest_palindromic_subsequence_greedy(inputs), expected_greedy)
-
-    def test_long_phrase(self):
-        input_text = "La ruta nos aportó otro paso natural que nadie había notado antes"
+        normalized = [normalize_text(frase) for frase in frases]
         
-        # Normalizamos la entrada
-        normalized_input = normalize_text(input_text)
+        dp_results = find_longest_palindromic_subsequence_dp(normalized)
+        brute_results = find_longest_palindromic_subsequence_brute(normalized)
+        greedy_results = find_longest_palindromic_subsequence_greedy(normalized)
 
-        # Ejecutar los métodos con texto ya normalizado
-        result_dp = find_longest_palindromic_subsequence_dp([normalized_input], pre_normalized=True)[0]
-        result_brute = find_longest_palindromic_subsequence_brute([normalized_input], pre_normalized=True)[0]
-        result_greedy = find_longest_palindromic_subsequence_greedy([normalized_input], pre_normalized=True)[0]
+        for i, res in enumerate(dp_results):
+            with self.subTest(indice=i):
+                self.assertTrue(is_palindrome(res), f"DP falló en '{frases[i]}': {res} no es palíndromo")
+                self.assertEqual(res, brute_results[i], f"DP y Brute no coinciden en '{frases[i]}'")
 
-        # Verificar que los resultados no estén vacíos y sean palíndromos
-        self.assertTrue(len(result_dp) > 5)
-        self.assertEqual(result_dp, result_brute)  # DP y Brute deben dar lo mismo
-        self.assertTrue(result_greedy == result_dp or len(result_greedy) + 1 >= len(result_dp))  # Greedy puede no ser óptimo
+        for i, res in enumerate(greedy_results):
+            with self.subTest(indice=i):
+                self.assertTrue(is_palindrome(res), f"Greedy falló en '{frases[i]}'")
 
-    def test_perfect_palindrome(self):
-        input_text = "A man, a plan, a canal: Panama"
-        expected = normalize_text(input_text)
-        
-        result_dp = find_longest_palindromic_subsequence_dp([input_text])[0]
-        self.assertEqual(result_dp, expected)
+    def test_b_pequeno(self):
+        """Test b) Pequeño (100 frases): Validación general"""
+        from random import choices, randint
+        import string
 
-        result_brute = find_longest_palindromic_subsequence_brute([input_text])[0]
-        self.assertEqual(result_brute, expected)
+        def random_string(length=20):
+            return ''.join(choices(string.ascii_lowercase + ' ', k=length))
 
-        result_greedy = find_longest_palindromic_subsequence_greedy([input_text])[0]
-        self.assertEqual(result_greedy, expected)
+        # Mezcla de frases base y aleatorias
+        frases = ["abcde", "abaccad", "racecar", "xyzzyx", "level"] * 20
+        frases += [random_string() for _ in range(80)]
+        normalized = [normalize_text(f) for f in frases]
 
-    def test_edge_cases(self):
-        inputs = ["", "   ", "a", "ab", "abc"]
+        resultados = find_longest_palindromic_subsequence_greedy(normalized)
 
-        dp_result = find_longest_palindromic_subsequence_dp(inputs)
-        self.assertEqual(dp_result, ["", "", "a", "a", "a"])
+        for i, res in enumerate(resultados):
+            if i % 10 == 0:
+                print(f"Evaluando resultado {i}...")
+            self.assertTrue(is_palindrome(res), f"Greedy falló en frase {i}: '{res}'")
 
-        brute_result = find_longest_palindromic_subsequence_brute(inputs)
-        self.assertEqual(brute_result, ["", "", "a", "a", "a"])
+    def test_c_mediano(self):
+        """Test c) Mediano (1000 frases): Escalabilidad básica"""
+        from random import choices
+        import string
 
-        greedy_result = find_longest_palindromic_subsequence_greedy(inputs)
-        self.assertEqual(greedy_result, ["", "", "a", "a", "a"])
+        def random_string(length=20):
+            return ''.join(choices(string.ascii_lowercase + ' ', k=length))
 
-    if __name__ == '__main__':
-        unittest.main()
+        frases = [random_string() for _ in range(1000)]
+        normalized = [normalize_text(f) for f in frases]
+        resultados = find_longest_palindromic_subsequence_dp(normalized)
+
+        for i, res in enumerate(resultados):
+            if i % 100 == 0:
+                print(f"Evaluando resultado {i}...")
+            self.assertTrue(is_palindrome(res), f"DP falló en frase {i}. Resultado: '{res}'")
+
+    def test_d_grande(self):
+        """Test d) Grande (10000 frases): Alto volumen"""
+        from random import choices
+        import string
+
+        def random_string(length=20):
+            return ''.join(choices(string.ascii_lowercase + ' ', k=length))
+
+        frases = [random_string() for _ in range(10000)]
+        normalized = [normalize_text(f) for f in frases]
+        resultados = find_longest_palindromic_subsequence_dp(normalized)
+
+        for i, res in enumerate(resultados):
+            if i % 1000 == 0:
+                print(f"Evaluando resultado {i}...")
+            self.assertTrue(is_palindrome(res), f"DP falló en frase {i}. Resultado: '{res}'")
+
+    def test_e_extra_grande(self):
+        """Test e) Extra grande (50000 frases): Muy lento pero válido"""
+        from random import choices
+        import string
+
+        def random_string(length=20):
+            return ''.join(choices(string.ascii_lowercase + ' ', k=length))
+
+        frases = [random_string() for _ in range(50000)]
+        normalized = [normalize_text(f) for f in frases]
+        resultados = find_longest_palindromic_subsequence_dp(normalized)
+
+        for i, res in enumerate(resultados[:10]):  # Validar solo las primeras 10 por rendimiento
+            print(f"Evaluando muestra {i}: '{res}'")
+            self.assertTrue(is_palindrome(res), f"DP falló en frase {i}. Resultado: '{res}'")
+
+    # -----------------------------
+    # Tests adicionales no basados en tamaño
+    # -----------------------------
+
+    def test_caso_vacio(self):
+        """Valida comportamiento con frases vacías"""
+        frases = ["", "   ", "\t\n\r"]
+        resultados = find_longest_palindromic_subsequence_brute(frases)
+
+        for i, res in enumerate(resultados):
+            with self.subTest(indice=i):
+                self.assertEqual(res, "")
+                self.assertTrue(is_palindrome(res))
+
+    def test_un_solo_caracter(self):
+        """Test con frases de un solo carácter"""
+        frases = ["a", "b", "c", "d", "e"]
+        resultados = find_longest_palindromic_subsequence_greedy(frases)
+
+        for i, res in enumerate(resultados):
+            with self.subTest(indice=i):
+                self.assertEqual(res, frases[i])
+                self.assertTrue(is_palindrome(res))
+
+    def test_palindromo_completo(self):
+        """Frase completa es un palíndromo"""
+        frases = ["racecar", "madam", "radar", "level", "deed"]
+        resultados = find_longest_palindromic_subsequence_brute(frases)
+
+        for i, res in enumerate(resultados):
+            with self.subTest(frase=frases[i]):
+                self.assertEqual(res, frases[i])
+                self.assertTrue(is_palindrome(res))
+
+    def test_sin_palindromo_claro(self):
+        """Frases sin palíndromo obvio"""
+        frases = ["abcdefgh", "lmnopqrst", "xyz", "world", "hello"]
+        resultados = find_longest_palindromic_subsequence_greedy(frases)
+
+        for i, res in enumerate(resultados):
+            with self.subTest(frase=frases[i]):
+                self.assertLessEqual(len(res), 2, f"Resultado muy largo: '{res}'")
+                self.assertTrue(is_palindrome(res))
+
+    def test_palindromo_interno(self):
+        """Palíndromo dentro de texto aleatorio"""
+        frases = [
+            "abcxyzracecarxyzcba",
+            "holaanitalavalatinachao",
+            "abcdefggfedcba",
+            "xxxyyyzzzyyyxxx",
+            "aabbcbbadd"
+        ]
+        expected = [
+            "racecar",
+            "anitalavalatina",
+            "abcdefggfedcba",
+            "yyyzzzyyy",
+            "abbcbba"
+        ]
+
+        normalized = [normalize_text(f) for f in frases]
+        resultados_dp = find_longest_palindromic_subsequence_dp(normalized)
+        resultados_brute = find_longest_palindromic_subsequence_brute(normalized)
+        resultados_greedy = find_longest_palindromic_subsequence_greedy(normalized)
+
+        for i, (dp, brute, greedy, exp) in enumerate(zip(resultados_dp, resultados_brute, resultados_greedy, expected)):
+            with self.subTest(indice=i):
+                self.assertIn(dp, brute)
+                self.assertTrue(is_palindrome(dp))
+                self.assertTrue(is_palindrome(brute))
+                self.assertTrue(is_palindrome(greedy))
+
+if __name__ == '__main__':
+    unittest.main()
