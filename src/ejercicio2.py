@@ -1,6 +1,5 @@
 from itertools import combinations
 
-
 def read_file(funcion):
     file2 = "../entradas/file2.txt"
 
@@ -25,7 +24,7 @@ def read_file(funcion):
         for _ in range(m):
             grafo.append(list(map(int, lineas[i].split())))
             i += 1
-
+        print(grafo)
         # Toma cada caracter de la linea y lo convierte en una lista de enteros separados con coma
         calificaciones = list(map(int, lineas[i].split()))
 
@@ -49,13 +48,15 @@ def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
                 reglas[supervisor].append(supervisado)
                 tiene_supervisor[supervisado] = True
 
-    # Detectar raíz (el empleado que no tiene supervisor) para el algoritmo dinamico
-
     if funcion == "voraz":
         print(reglas)
         return max_sumaVoraz(m, reglas, calificaciones)
     elif funcion == "dinamica":
-        raiz = next(i for i, tiene in enumerate(tiene_supervisor) if not tiene)
+        # Detectar raíz (el empleado que no tiene supervisor) para el algoritmo dinamico
+        raices = [i for i, tiene in enumerate(tiene_supervisor) if not tiene]
+        if len(raices) != 1:
+            raise ValueError("El grafo debe ser un único árbol")
+        raiz = raices[0]
         return max_sumaDinamica(m, raiz, reglas, calificaciones)
     elif funcion == "bruta":
         return max_sumaFuerzaBruta(m, reglas, calificaciones)
@@ -118,49 +119,55 @@ def max_sumaVoraz(m, reglas, calificaciones):
 
 # Enfoque TOP-DOWN -> Guarda resultados, para no volverlos a calcular
 
-dp = {}  # Diccionario donde se guardan los resultados optimos de los subproblemas
+ # Diccionario donde se guardan los resultados optimos de los subproblemas
 
 
 # subprolemas:
 def max_sumaDinamica(m, raiz, reglas, calificaciones):
+    dp = {}
     # Utilizamos esta funcion para recorrer desde abajo hacia arriba
-    def recorrido(nodo):
+    # --- RECORRIDO POSTORDEN SIN RECURSIVIDAD ---
+    stack = []
+    visitado = [False] * m
+    stack.append((raiz, False))
 
-        no_invitado_empleado = 0
+    while stack:
+        nodo, procesado = stack.pop()
 
-        # Se verifica si el empleado no esta en los subordinados de empleado : 0...n
-        # lo que significa, que verifica si no se supervisa a si mismo
-        invitado_empleado = calificaciones[nodo] if nodo not in reglas[nodo] else 0
+        if not procesado:
+            stack.append((nodo, True))
+            # Añadimos hijos en orden inverso para procesarlos en el orden correcto
+            for subordinado in reversed(reglas[nodo]):
+                stack.append((subordinado, False))
+        else:
+            no_invitado = 0
+            invitado = calificaciones[nodo]
 
-        # recorremos todos los subordinados de cada empleado
-        for subordinados in reglas[nodo]:
-            recorrido(subordinados)
-            no_invitado_empleado += max(dp[subordinados])
-            invitado_empleado += dp[subordinados][0]
+            for subordinado in reglas[nodo]:
+                no_invitado += max(dp[subordinado])  # Máximo entre invitar o no al hijo
+                invitado += dp[subordinado][0]       # Si invitamos al padre, no al hijo
 
-        dp[nodo] = (no_invitado_empleado, invitado_empleado)
+            dp[nodo] = (no_invitado, invitado)
 
-    recorrido(raiz)
+    # --- RECONSTRUCCIÓN DE LA SOLUCIÓN (ITERATIVA) ---
     invitados = [0] * m
+    pila = [(raiz, False)]  # (nodo, tomar_supervisor)
 
-    def construir_solcionOptima(nodo, tomar_supervisor):
+    while pila:
+        nodo, tomar_supervisor = pila.pop()
 
         no_invitado, invitado = dp[nodo]
-
         invitar = not tomar_supervisor and invitado > no_invitado
-
         invitados[nodo] = 1 if invitar else 0
 
-        for subordinado in reglas[nodo]:
-            construir_solcionOptima(subordinado, invitar)
+        # Añadimos los subordinados en orden inverso para mantener el orden original
+        for subordinado in reversed(reglas[nodo]):
+            pila.append((subordinado, invitar))
 
-    construir_solcionOptima(raiz, False)
-
+    # --- SUMA FINAL ---
     suma_maxima = sum(calificaciones[i] for i in range(m) if invitados[i] == 1)
-
     invitados.append(suma_maxima)
-    print(invitados)
-    return invitados
+    return invitados + [suma_maxima]
 
 
 def max_sumaFuerzaBruta(m, reglas, calificaciones):
