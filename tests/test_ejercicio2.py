@@ -21,6 +21,18 @@ class TestsFiestaCompañia(unittest.TestCase):
         resultado_voraz = arbol_reglasSupervicion(m, grafo, calificaciones, "voraz")
         self.assertTrue(validar_solucion(m, grafo, resultado_voraz))
 
+    def test_tamano_10(self):
+        m = 10
+        grafo_10 = generar_arbol_lineal(m)
+        calificaciones = list(range(m))  # Datos correctos
+        print(calificaciones)
+
+        # resultado_voraz = arbol_reglasSupervicion(m, grafo_10, calificaciones, "voraz")
+        resultado_dinamica = arbol_reglasSupervicion(m, grafo_10, calificaciones, "dinamica")
+
+        # self.assertTrue(validar_solucion(m, grafo_10, resultado_voraz))
+        self.assertTrue(validar_solucion(m, grafo_10, resultado_dinamica))
+
     def test_tamano_100(self):
         m = 100
         grafo_100 = generar_arbol_lineal(m)
