@@ -47,7 +47,7 @@ Se exploran todas las posibles subsecuencias de la cadena usando recursión con 
 
 -**Ventajas:** Útil para validación y comparación
 
--**Limitación:**Inviable para entradas mayores a 20-25 caracteres
+-**Limitación:** Inviable para entradas mayores a 20-25 caracteres
 
     def find_longest_palindromic_subsequence_brute(input_lines):
         def is_palindrome(s): return s == s[::-1]
@@ -171,8 +171,7 @@ Se realizaron pruebas unitarias con distintos escenarios:
 
 ## Gráficas de Rendimiento
 
-    ![Gráfica de tiempos promedio](../graficas/tiempo_promedio.png)
-
+    ![Gráfica de tiempos promedio](../docs/image-1.png)
 
 **Se realizaron pruebas con entradas de:**
 
