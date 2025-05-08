@@ -28,13 +28,13 @@ class TestsFiestaCompania(unittest.TestCase):
         calificaciones = list(range(m))  # Datos correctos
         print(calificaciones)
 
-        # resultado_voraz = arbol_reglasSupervicion(m, grafo_10, calificaciones, "voraz")
+        resultado_voraz = arbol_reglasSupervicion(m, grafo_10, calificaciones, "voraz")
         #resultado_dinamica = arbol_reglasSupervicion(m, grafo_10, calificaciones, "dinamica")
-        resultado_bruta = arbol_reglasSupervicion(m, grafo_10, calificaciones, "bruta")
+        #resultado_bruta = arbol_reglasSupervicion(m, grafo_10, calificaciones, "bruta")
 
-        # self.assertTrue(validar_restricciones(m, grafo_10, resultado_voraz))
+        self.assertTrue(validar_restricciones(m, grafo_10, resultado_voraz))
         #self.assertTrue(validar_restricciones(m, grafo_10, resultado_dinamica))
-        self.assertTrue(validar_restricciones(m, grafo_10, resultado_bruta))
+        #self.assertTrue(validar_restricciones(m, grafo_10, resultado_bruta))
 
 
     def test_tamano_100(self):
@@ -43,11 +43,11 @@ class TestsFiestaCompania(unittest.TestCase):
             calificaciones = list(range(m))  # Datos correctos
             print(calificaciones)
 
-            resultado_voraz = arbol_reglasSupervicion(m, grafo_100, calificaciones, "voraz")
-            #resultado_dinamica = arbol_reglasSupervicion(m, grafo_100, calificaciones, "dinamica")
+            #resultado_voraz = arbol_reglasSupervicion(m, grafo_100, calificaciones, "voraz")
+            resultado_dinamica = arbol_reglasSupervicion(m, grafo_100, calificaciones, "dinamica")
 
-            self.assertTrue(validar_restricciones(m, grafo_100, resultado_voraz))
-            #self.assertTrue(validar_restricciones(m, grafo_100, resultado_dinamica))
+            #self.assertTrue(validar_restricciones(m, grafo_100, resultado_voraz))
+            self.assertTrue(validar_restricciones(m, grafo_100, resultado_dinamica))
 
     def test_tamano_1000(self):
         m = 1000
@@ -67,11 +67,11 @@ class TestsFiestaCompania(unittest.TestCase):
         calificaciones2 = list(range(m))
         print(calificaciones2)
 
-        # resultado_voraz = arbol_reglasSupervicion(m, grafo_10000, calificaciones2, "voraz")
-        resultado_dinamica = arbol_reglasSupervicion(m, grafo_10000, calificaciones2, "dinamica")
+        resultado_voraz = arbol_reglasSupervicion(m, grafo_10000, calificaciones2, "voraz")
+        #resultado_dinamica = arbol_reglasSupervicion(m, grafo_10000, calificaciones2, "dinamica")
 
-        # self.assertTrue(validar_restricciones(m, grafo_10000, resultado_voraz))
-        self.assertTrue(validar_restricciones(m, grafo_10000, resultado_dinamica))
+        self.assertTrue(validar_restricciones(m, grafo_10000, resultado_voraz))
+        #self.assertTrue(validar_restricciones(m, grafo_10000, resultado_dinamica))
 
     def test_tamano_50000(self):
         m = 50000

@@ -34,7 +34,7 @@ def medir_tiempos():
                 end_time = time.perf_counter()
 
                 if validar_restricciones(t, grafo, resultado):
-                    suma += (end_time - start_time) * 1000
+                    suma += (end_time - start_time)
                     exitosas += 1
                 else:
                     print(f"Resultado inválido en {estrategia} con m={t}")
@@ -77,7 +77,7 @@ def graficas(resultados):
 
     # Etiquetas y detalles
     plt.xlabel("Tamaño de entrada (m)")
-    plt.ylabel("Tiempo promedio (ms)")
+    plt.ylabel("Tiempo promedio (sg)")
     plt.title("Comparación de Tiempos Promedios por Estrategia")
     plt.legend()
     plt.grid(True, linestyle='--', alpha=0.5)

@@ -75,7 +75,7 @@ grandes tamaños de **`m`**. Se puede calcular con valores **`m < 50000`**.
 
 ## Algoritmo Voraz
 
-En el alogoritmo voraz se utilizo una estrategia que aunque no es inteligente y no considera todas las opciones 
+En el algoritmo voraz se utilizo una estrategia que aunque no es inteligente y no considera todas las opciones 
 como otros algoritmos, puede llegar a una solucion optima en un mejor tiempo que el de fuerza bruta. En este caso, 
 la estrategia que se utiliza es encontrar el maximo valor de calificación de un empleado en cada iteracion, 
 eliminando a su supervisor y subordinado de la lista de invitados, tambien se elimina el empleado que ya fue calculado 
@@ -95,6 +95,73 @@ Cuenta con una complejidad computacional de O(m<sup>2</sup>).
 Aunque es un algoritmo que no siempre garantiza una solución optima, puede recibir tamaños de entrada mas grandes 
 que el de fuerza bruta, por ende se puede calcular sus tiempos de ejecución efectivamente.
 
-## Tiempos de Ejecución vs
+## 4. Tiempos de Ejecución (vs)
+
+Se graficarón los tiempos de ejecucion de los algoritmos Voraz y Dinamico, donde cada barra representa un promedio 
+de la suma de tiempos que le tomo al algoritmo calcular cada tamaño 5 veces. 
+
 
 ![grafica tiempos de ejecución](/docs/images/Figure_1.png)
+
+    numero de repiticiones : 5
+    tamaños de entrada : 100, 200, 300, 400, 500
+
+### ¿Por que no se muestran los tiempos de ejecución del algirmto de fuerza bruta?
+
+No se grafica este algortimo porque al ser unos tamaño de entrada muy grandes, a el algoritmo le es imposible o 
+tarda mucho en construir la solucion.
+
+## 5. Tamaños de Entrada
+
+### a. Prueba de Juguete ( m = 10)}
+
+| Algoritmo    | Tiempo ejecución Test |
+|--------------|-----------------------|
+| Fuerza Bruta | 0.06 s                |
+| Dinámico     | 0.05 s                |
+| Voraz        | 0.07 s                |
+
+### b. Prueba de Pequeño ( m = 100)
+
+| Algoritmo    | Tiempo ejecución Test |
+|--------------|-----------------------|
+| Fuerza Bruta | inviable              |
+| Dinámico     | 0.16 s                |
+| Voraz        | 0.18 s                |
+
+### c. Prueba de Mediano ( m = 1000)
+
+| Algoritmo    | Tiempo ejecución Test |
+|--------------|-----------------------|
+| Fuerza Bruta | inviable              |
+| Dinámico     | 0.23 s                |
+| Voraz        | 0.22 s                |
+
+### d. Prueba de Grande ( m = 10000)
+
+| Algoritmo    | Tiempo ejecución Test |
+|--------------|-----------------------|
+| Fuerza Bruta | inviable              |
+| Dinámico     | 12.68 s               |
+| Voraz        | 19.96 s               |
+
+### E. Prueba de ExtraGrande ( m = 50000)
+
+| Algoritmo    | Tiempo ejecución Test  |
+|--------------|------------------------|
+| Fuerza Bruta | inviable               |
+| Dinámico     | memoryError / inviable |
+| Voraz        | memoryError / inviable |
+
+# 6. Tabla de Comparación complejidad temporal
+
+| Algoritmo    | O( )                              | observaciones                                                   |
+|--------------|-----------------------------------|-----------------------------------------------------------------|
+| Fuerza Bruta | O(m)                              | ineficiente con m < 20, pero garantiza solución optima          |
+| Dinámico     | O(2<sup>m</sup> * m <sup>2</sup>) | eficiente con m > 20, pero no siempre garantiza solucion optima |
+| Voraz        | O(m <sup>2</sup>)                 | eficiente con m > 20, siempre garantiza solución optima         |
+
+# 7. Conclusiones
+
+
+
