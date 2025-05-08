@@ -64,6 +64,38 @@ Se exploran todas las posibles subsecuencias de la cadena usando recursión con 
             result.append(best)
         return result
 
+**¿Qué recibe?**
+
+Una lista de frases (ej: ["Dábale arroz a la zorra el abad"]).
+
+**¿Cómo funciona?**
+
+-Normaliza cada frase:
+
+-Convierte a minúsculas.
+
+-Quita tildes y signos de puntuación.
+
+-Elimina espacios.
+
+## Ejemplo:
+
+    "Dábale arroz a la zorra el abad" → "dabalearrozalazorraelabad"
+
+**Busca todas las posibles subsecuencias:**
+
+        Genera todas las combinaciones posibles de caracteres (substrings) de la cadena.
+
+        Revisa una por una si es palíndroma (se lee igual al derecho y al revés).
+
+**Guarda la más larga:**
+
+        Cada vez que encuentra una más larga que la anterior, la guarda.
+
+**¿Qué devuelve?**
+
+Una lista con la subsecuencia palindrómica más larga de cada frase.
+
 ## Programación Dinámica
 
 Se utiliza una matriz dp[i][j] donde cada celda guarda la longitud de la subsecuencia palindrómica más larga entre los índices i y j. Luego se reconstruye una solución válida usando backtracking y memoización.
@@ -171,7 +203,7 @@ Se realizaron pruebas unitarias con distintos escenarios:
 
 ## Gráficas de Rendimiento
 
-![Gráfica de tiempos promedio](../docs/image-1.png)
+![Gráfica de tiempos promedio](../docs/image-1.png) 
 
 **Se realizaron pruebas con entradas de:**
 
