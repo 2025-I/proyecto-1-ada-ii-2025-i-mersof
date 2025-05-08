@@ -24,7 +24,7 @@ def read_file(funcion):
         for _ in range(m):
             grafo.append(list(map(int, lineas[i].split())))
             i += 1
-        print(grafo)
+
         # Toma cada caracter de la linea y lo convierte en una lista de enteros separados con coma
         calificaciones = list(map(int, lineas[i].split()))
 
@@ -50,7 +50,6 @@ def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
                 tiene_supervisor[supervisado] = True
 
     if funcion == "voraz":
-        print(reglas)
         return max_sumaVoraz(m, reglas, calificaciones)
     elif funcion == "dinamica":
         # Detectar raíz (el empleado que no tiene supervisor) para el algoritmo dinamico
@@ -63,6 +62,7 @@ def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
         return max_sumaFuerzaBruta(m, reglas, calificaciones)
 
 def max_sumaVoraz(m, reglas, calificaciones):
+
     maxima_calificacion = max(calificaciones)  # Escogemos el valor maximo de la lista calificaciones
     index_maximo = calificaciones.index(
         maxima_calificacion)  # Obtenemos su indice del empelado con el valor maximo para saber en que posicion se ubica en invitados
@@ -112,11 +112,15 @@ def max_sumaVoraz(m, reglas, calificaciones):
             break
     # Añadimos la suma_maxima que se obtuvo para construir y devolver la solucion optima
     invitados.append(suma_maxima)
-    print(invitados)
+
+    for i in invitados:
+        print(i, end=" ")
+    print()
     return invitados
 
 
 def max_sumaDinamica(m, raiz, reglas, calificaciones):
+
     dp = {}
     # Utilizamos esta funcion para recorrer desde abajo hacia arriba
     # --- RECORRIDO POSTORDEN SIN RECURSIVIDAD ---
@@ -160,7 +164,11 @@ def max_sumaDinamica(m, raiz, reglas, calificaciones):
     # --- SUMA FINAL ---
     suma_maxima = sum(calificaciones[i] for i in range(m) if invitados[i] == 1)
     invitados.append(suma_maxima)
-    return invitados + [suma_maxima]
+
+    for i in invitados:
+        print(i, end=" ")
+    print()
+    return invitados
 
 
 def max_sumaFuerzaBruta(m, reglas, calificaciones):
@@ -188,11 +196,13 @@ def max_sumaFuerzaBruta(m, reglas, calificaciones):
         invitados[_] = 1
 
     invitados.append(suma_maxima)
-    print(invitados)
+    for i in invitados:
+        print(i, end=" ")
+    print()
     return invitados
 
 
 if __name__ == "__main__":
     read_file("voraz")
-    # read_file("dinamica")
-    # read_file("bruta")
+    #read_file("dinamica")
+    #read_file("bruta")

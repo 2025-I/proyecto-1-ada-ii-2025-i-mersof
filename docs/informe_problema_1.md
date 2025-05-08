@@ -1,14 +1,14 @@
-# Ejercicio 1: Subsecuencias Palindrómicas Más Largas
+# Problema 1: Subsecuencias Palindrómicas Más Largas
 
 ## Descripción del Problema
 
-Dada una cadena de caracteres, se busca encontrar todas las subsecuencias palindrómicas de máxima longitud. Antes del procesamiento, la cadena es normalizada:
+Dada una cadena de caracteres, se busca encontrar todas las sub-secuencias palíndromas de máxima longitud. Antes del procesamiento, la cadena es normalizada.
 
 - Convertida a minúsculas
 - Se eliminan caracteres no alfanuméricos
 - Se eliminan tildes y acentos
 
-La salida esperada es una cadena palindrómica de máxima longitud, en minúsculas y sin símbolos especiales.
+La salida esperada es una cadena palíndroma de máxima longitud, en minúsculas y sin símbolos especiales.
 
 ## Función de Normalización
 
@@ -39,7 +39,7 @@ Entrada de Ejemplo:
 
 ## Fuerza Bruta 
 
-Se exploran todas las posibles subsecuencias de la cadena usando recursión con memoización. Se conservan las palindrómicas y se retorna la de mayor longitud.
+Se exploran todas las posibles sub secuencias de la cadena usando recursión con memoización. Se conservan las palíndromas y se retorna la de mayor longitud.
 
 -**Complejidad temporal:** O(2ⁿ)
 
@@ -70,13 +70,13 @@ Se exploran todas las posibles subsecuencias de la cadena usando recursión con 
 
 **¿Cómo funciona?**
 
-    -Normaliza cada frase:
+    - Normaliza cada frase:
 
-    -Convierte a minúsculas.
+    - Convierte en minúsculas.
 
-    -Quita tildes y signos de puntuación.
+    - Quita tildes y signos de puntuación.
 
-    -Elimina espacios.
+    - Elimina espacios.
 
 ## Ejemplo:
 
@@ -94,7 +94,7 @@ Se exploran todas las posibles subsecuencias de la cadena usando recursión con 
 
 **¿Qué devuelve?**
 
-Una lista con la subsecuencia palindrómica más larga de cada frase.
+Una lista con la subsecuencia palindróma más larga de cada frase.
 
 ## Programación Dinámica
 
@@ -276,8 +276,7 @@ Cada prueba se ejecutó 5 veces y se promedió el tiempo. Las gráficas se gener
 
 ## Conclusión
 
-Los tres algoritmos implementados abordan el problema con distintos enfoques: fuerza bruta garantiza exactitud pero es computacionalmente costosa; programación dinámica ofrece precisión y eficiencia, siendo la más recomendable; y el enfoque voraz, aunque rápido, no siempre encuentra la solución óptima. Esta comparación evidencia cómo la elección del algoritmo adecuado impacta directamente en el rendimiento y la calidad de los resultados.
-
+Los tres algoritmos implementados abordan el problema con distintos enfoques: fuerza bruta garantiza exactitud, pero es computacionalmente costosa; programación dinámica ofrece precisión y eficiencia, siendo la más recomendable; y el enfoque voraz, aunque rápido, no siempre encuentra la solución óptima. Esta comparación evidencia cómo la elección del algoritmo adecuado impacta directamente en el rendimiento y la calidad de los resultados.
 | Tamaño de Entrada | Programación Dinámica (segundos) | Fuerza Bruta (segundos) | Greedy (segundos) |
 |-------------------|----------------------------------|------------------------|-------------------|
 | Juguete           | 0.001                           | 0.002                  | 0.001             |
@@ -286,4 +285,4 @@ Los tres algoritmos implementados abordan el problema con distintos enfoques: fu
 | Grande            | 1.0                              | 6.0                    | 0.8               |
 | Extra Grande      | 1.7                              | 16.0                   | 1.5               |
 
-A rauz de este alanilis se puede concluir que eñ  método de programación dinámica  es el más adecuado para encontrar la subsecuencia palindrómica más larga , ya que ofrece una solución óptima con complejidad O(n²) . Aunque Greedy  es más rápido, solo encuentra palíndromos contiguos , mientras que fuerza bruta  es demasiado lento para ser práctico.
+A raíz de este análisis se puede concluir que el  método de programación dinámica  es el más adecuado para encontrar la sub-secuencia palíndroma más larga, ya que ofrece una solución óptima con complejidad O(n²). Aunque Greedy  es más rápido, solo encuentra palíndromos contiguos, mientras que fuerza bruta  es demasiado lento para ser práctico.
