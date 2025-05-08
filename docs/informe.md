@@ -66,17 +66,17 @@ Se exploran todas las posibles subsecuencias de la cadena usando recursión con 
 
 **¿Qué recibe?**
 
-Una lista de frases (ej: ["Dábale arroz a la zorra el abad"]).
+    Una lista de frases (ej: ["Dábale arroz a la zorra el abad"]).
 
 **¿Cómo funciona?**
 
--Normaliza cada frase:
+    -Normaliza cada frase:
 
--Convierte a minúsculas.
+    -Convierte a minúsculas.
 
--Quita tildes y signos de puntuación.
+    -Quita tildes y signos de puntuación.
 
--Elimina espacios.
+    -Elimina espacios.
 
 ## Ejemplo:
 
@@ -147,6 +147,32 @@ Se utiliza una matriz dp[i][j] donde cada celda guarda la longitud de la subsecu
             result.append(''.join(res))
         return result
 
+**¿Qué recibe?**
+
+    Una lista de frases.
+
+**¿Cómo funciona?**
+
+    Normalización (igual que el anterior).
+
+    Crea una matriz dp[i][j] para cada frase normalizada:
+
+        Cada celda representa la longitud de la subsecuencia palindrómica entre las posiciones i y j.
+
+    Rellena la matriz:
+
+        Si el carácter en i es igual al de j, suma 2 al valor de dp[i+1][j-1].
+
+        Si no son iguales, toma el máximo entre dp[i+1][j] y dp[i][j-1].
+
+    Reconstruye la subsecuencia palindrómica:
+
+        Empieza desde los extremos y avanza hacia el centro usando la información guardada en la matriz.
+
+**¿Qué devuelve?**
+
+    Una lista con la subsecuencia palindrómica más larga (no necesariamente continua) de cada frase
+
 ## Algoritmo Voraz
 
 Se usa una técnica de expansión desde el centro para encontrar el substring palindrómico más largo. Aunque no garantiza la subsecuencia más larga, es muy eficiente.
@@ -177,6 +203,29 @@ Se usa una técnica de expansión desde el centro para encontrar el substring pa
             result.append(best)
         return result
 
+**¿Qué recibe?**
+
+    Una lista de frases.
+
+**¿Cómo funciona?**
+
+    Normaliza cada frase (como en los anteriores).
+
+    Revisa cada carácter como centro de un posible palíndromo:
+
+        Expande desde el centro hacia los lados.
+
+        Considera dos casos:
+
+            Centro impar (como "aba").
+
+            Centro par (como "abba").
+
+    Guarda el palíndromo más largo encontrado.
+
+**¿Qué devuelve?**
+
+    Una lista con el substring palindrómico más largo (es decir, caracteres consecutivos) de cada frase.
 ## Validación mediante Tests Unitarios
 
 Se realizaron pruebas unitarias con distintos escenarios:
@@ -205,6 +254,10 @@ Se realizaron pruebas unitarias con distintos escenarios:
 
 ![Gráfica de tiempos promedio](../docs/image-1.png) 
 
+**Fuerza Bruta:**  Aumenta exponencialmente con el tamaño de entrada.
+**Programación Dinámica:**  Aumenta cuadráticamente, pero es mucho más eficiente que Fuerza Bruta.
+**Greedy:**  También aumenta cuadráticamente, pero es más rápido que Programación Dinámica en algunos casos.
+
 **Se realizaron pruebas con entradas de:**
 
     -10 caracteres (juguete)
@@ -219,8 +272,14 @@ Cada prueba se ejecutó 5 veces y se promedió el tiempo. Las gráficas se gener
 
 ## Conclusión
 
-La solución por programación dinámica es la más adecuada para resolver el problema con precisión y eficiencia.
+Los tres algoritmos implementados abordan el problema con distintos enfoques: fuerza bruta garantiza exactitud pero es computacionalmente costosa; programación dinámica ofrece precisión y eficiencia, siendo la más recomendable; y el enfoque voraz, aunque rápido, no siempre encuentra la solución óptima. Esta comparación evidencia cómo la elección del algoritmo adecuado impacta directamente en el rendimiento y la calidad de los resultados.
 
-El enfoque voraz es útil para obtener respuestas rápidas, pero no garantiza la mejor solución.
+| Tamaño de Entrada | Programación Dinámica (segundos) | Fuerza Bruta (segundos) | Greedy (segundos) |
+|-------------------|----------------------------------|------------------------|-------------------|
+| Juguete           | 0.001                           | 0.002                  | 0.001             |
+| Pequeño           | 0.01                             | 0.03                   | 0.01              |
+| Mediano           | 0.1                              | 0.5                    | 0.1               |
+| Grande            | 1.0                              | 6.0                    | 0.8               |
+| Extra Grande      | 1.7                              | 16.0                   | 1.5               |
 
-El enfoque de fuerza bruta es útil para validaciones pequeñas.
+A rauz de este alanilis se puede concluir que eñ  método de programación dinámica  es el más adecuado para encontrar la subsecuencia palindrómica más larga , ya que ofrece una solución óptima con complejidad O(n²) . Aunque Greedy  es más rápido, solo encuentra palíndromos contiguos , mientras que fuerza bruta  es demasiado lento para ser práctico.
