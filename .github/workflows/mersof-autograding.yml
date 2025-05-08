@@ -1,0 +1,43 @@
+
+name: Autograding Tests MerSof
+'on':
+ - push
+ - pull_request
+ - repository_dispatch
+ 
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Compilación ejercicio1
+      id: compilacion-ejercicio1
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Compilación ejercicio1
+        setup-command: pip install -r requirements.txt
+        command: python -m py_compile src/ejercicio1.py
+        timeout: 3600
+        max-score: 25
+    - name: Compilación ejercicio2
+      id: compilacion-ejercicio2
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Compilación ejercicio2
+        setup-command: ''
+        command: python -m py_compile src/ejercicio2.py
+        timeout: 3600
+        max-score: 25
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        COMPILACION-EJERCICIO1_RESULTS: "${{steps.compilacion-ejercicio1.outputs.result}}"
+        COMPILACION-EJERCICIO2_RESULTS: "${{steps.compilacion-ejercicio2.outputs.result}}"
+      with:
+        runners: compilacion-ejercicio1,compilacion-ejercicio2
