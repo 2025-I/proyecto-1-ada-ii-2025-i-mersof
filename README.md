@@ -3,10 +3,8 @@
 
 ## Integrantes
 
-Nombre completo | Código
-Estudiante1 | 123456
-Estudiante2 | 123457
-Estudiante3 | 123458
+Sofia Castillo Giraldo | 2266149
+Merly Velasquez Cortez | 2266016 
 
 ## Descripción del taller
 
