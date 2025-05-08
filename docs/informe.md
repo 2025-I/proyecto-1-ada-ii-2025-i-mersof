@@ -255,8 +255,12 @@ Se realizaron pruebas unitarias con distintos escenarios:
 ![Gráfica de tiempos promedio](../docs/image-1.png) 
 
 **Fuerza Bruta:**  Aumenta exponencialmente con el tamaño de entrada.
+
 **Programación Dinámica:**  Aumenta cuadráticamente, pero es mucho más eficiente que Fuerza Bruta.
-**Greedy:**  También aumenta cuadráticamente, pero es más rápido que Programación Dinámica en algunos casos.
+
+**Greedy:**  También aumenta cuadráticamente, pero es más rápido que Programación Dinámica en algunos 
+casos.
+
 
 **Se realizaron pruebas con entradas de:**
 
