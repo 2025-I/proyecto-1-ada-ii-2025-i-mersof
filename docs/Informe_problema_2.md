@@ -127,7 +127,7 @@ tarda mucho en construir la solución.
 
 ## 5. Tamaños de Entrada
 
-### a. Prueba de Juguete ( m = 10)}
+### a. Prueba de Juguete ( m = 10)
 
 | Algoritmo    | Tiempo ejecución Test |
 |--------------|-----------------------|
@@ -178,11 +178,11 @@ tarda mucho en construir la solución.
 # 7. Conclusiones
 
 Comparando tanto tiempos de ejecución como complejidad computacional de cada algoritmo, podemos inferir que la opcion más acertada
-es usar un algoritmo dinamico para hallar la solución, tarda menos, se puede ingresar grandes tamaños y siempre garantizará una solución optima.
+es usar un algoritmo dinamico para hallar la solución; tarda menos, se puede ingresar grandes tamaños y siempre garantizará una solución optima.
 
 Acercado a este caso se pudo observar que, lo mejor para resolver el problema fue usar programación dinamica puesto que la voraz y de fuerza bruta
-son computacionalmente peores que la dinamica, y esta siempre aseguro la maximización de la suma de calificaciones cumpliendo con las debidas restricciones
-de no incluir en los invitaos ni al supervisor ni a su subordinado.
+son computacionalmente peores que la dinamica, y esta siempre aseguró la maximización de la suma de calificaciones cumpliendo con las debidas restricciones
+de no incluir en los invitados ni al supervisor ni a su subordinado.
 
 
 

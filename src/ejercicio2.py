@@ -65,21 +65,22 @@ def max_sumaVoraz(m, reglas, calificaciones):
 
     maxima_calificacion = max(calificaciones)  # Escogemos el valor maximo de la lista calificaciones
     index_maximo = calificaciones.index(
-        maxima_calificacion)  # Obtenemos su indice del empelado con el valor maximo para saber en que posicion se ubica en invitados
-    index_eliminados = set()  # Se añadiran al conjunto el supervisor y el subordinado del empleado con el valor maximo, para no invitarlos
+        maxima_calificacion)       # Obtenemos su indice del empelado con el valor maximo para saber en que posicion se ubica en invitados
+    index_eliminados = set()      # Se añadiran al conjunto el supervisor y el subordinado del empleado con el valor maximo, para no invitarlos
     suma_maxima = 0  # Se iran sumando las calificaciones de los empleados de mayor calificacion
     invitados = [0] * m  # Lista del tamaño del numero de empleados, para la solucion optima
 
     while maxima_calificacion is not None:
 
-        if index_maximo in reglas[index_maximo]:
+        if index_maximo in reglas[index_maximo]:  #Supervisa a si mismo
             index_eliminados.add(index_maximo)
             maxima_calificacion = max((v for i, v in enumerate(calificaciones) if i not in index_eliminados),
                                       default=None)
             if maxima_calificacion is None:
                 break
             index_maximo = calificaciones.index(maxima_calificacion)
-            continue
+
+
         # Se va sumando las calificaciones de los empleados con mayor calificacion
         # Y se invitan
 
@@ -122,8 +123,7 @@ def max_sumaVoraz(m, reglas, calificaciones):
 def max_sumaDinamica(m, raiz, reglas, calificaciones):
 
     dp = {}
-    # Utilizamos esta funcion para recorrer desde abajo hacia arriba
-    # --- RECORRIDO POSTORDEN SIN RECURSIVIDAD ---
+    # Utilizamos esta funcion para recorrer desde abajo hacia arriba (post orden)
     stack = [(raiz, False)]
 
     while stack:
@@ -144,7 +144,7 @@ def max_sumaDinamica(m, raiz, reglas, calificaciones):
 
             dp[nodo] = (no_invitado, invitado)
 
-    # --- RECONSTRUCCIÓN DE LA SOLUCIÓN (ITERATIVA) ---
+    # --- Construimos la solucion (nodos invitados) ---
     invitados = [0] * m
     pila = [(raiz, False)]  # (nodo, tomar_supervisor)
 
@@ -176,9 +176,11 @@ def max_sumaFuerzaBruta(m, reglas, calificaciones):
 
     def validar_combinacion(comb):
 
-        for i in comb:
-            for j in comb:
-                if i != j and j in reglas.get(i, []):
+        for supervisor in comb:
+            for subordinado in comb:
+                if supervisor != subordinado and subordinado in reglas.get(supervisor, []):
+                    return False
+                elif supervisor == subordinado: #supervisa a si mismo
                     return False
         return True
 
@@ -194,6 +196,7 @@ def max_sumaFuerzaBruta(m, reglas, calificaciones):
         invitados[_] = 1
 
     invitados.append(suma_maxima)
+
     for i in invitados:
         print(i, end=" ")
     print()

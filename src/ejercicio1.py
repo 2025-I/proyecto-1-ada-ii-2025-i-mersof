@@ -2,16 +2,21 @@ import re
 import tkinter as tk
 from tkinter import filedialog
 import unicodedata
- 
+
+
 # Normalizar la cadena: eliminar caracteres no alfabéticos y convertir a minúsculas
 
 def normalize_text(text: str) -> str:
+
     # Normalización Unicode para quitar acentos
+
     text = unicodedata.normalize('NFD', text)  # Descompone los caracteres con acentos
     text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')  # Elimina los caracteres de acento
-    
+
     # Eliminar todo lo que no sea alfabético y convertir a minúsculas
+
     return re.sub(r'[^a-zA-Z]', '', text).lower()
+
 
 # Función de programación dinámica (LPS)
 def find_longest_palindromic_subsequence_dp(input_lines: list[str], pre_normalized=False) -> list[str]:
@@ -45,9 +50,11 @@ def find_longest_palindromic_subsequence_dp(input_lines: list[str], pre_normaliz
         result.append(normalized_phrase[start:start + max_len])
     return result
 
+
 # Función fuerza bruta para encontrar la subsecuencia palíndroma más larga
 def find_longest_palindromic_subsequence_brute(input_lines: list[str], pre_normalized=False) -> list[str]:
-    def is_palindrome(s): return s == s[::-1]
+    def is_palindrome(s):
+        return s == s[::-1]
 
     result = []
     for phrase in input_lines:
@@ -61,6 +68,7 @@ def find_longest_palindromic_subsequence_brute(input_lines: list[str], pre_norma
                     best = sub
         result.append(best)
     return result
+
 
 # Función voraz para encontrar la subsecuencia palíndroma más larga
 def find_longest_palindromic_subsequence_greedy(input_lines: list[str], pre_normalized=False) -> list[str]:
@@ -81,6 +89,7 @@ def find_longest_palindromic_subsequence_greedy(input_lines: list[str], pre_norm
         result.append(best)
     return result
 
+
 # Función para seleccionar un archivo
 def choose_file():
     root = tk.Tk()
@@ -88,8 +97,9 @@ def choose_file():
     file_path = filedialog.askopenfilename(title="Selecciona un archivo .txt", filetypes=[("Text files", "*.txt")])
     return file_path
 
+
 # Función principal para leer la entrada desde un archivo y ejecutar las técnicas
-def main(): 
+def main():
     file_path = choose_file()
     if not file_path:
         print("No se seleccionó ningún archivo.")
@@ -97,10 +107,10 @@ def main():
 
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = [line.strip() for line in f.readlines()]
- 
+
     try:
         n = int(lines[0])
-        phrases = lines[1:n+1]
+        phrases = lines[1:n + 1]
     except (ValueError, IndexError):
         print("Formato incorrecto: primera línea debe ser un número.")
         return
@@ -117,6 +127,7 @@ def main():
         print(f"  DP     : {dp_result[i]}")
         print(f"  Fuerza Bruta: {brute_result[i]}")
         print(f"  Greedy : {greedy_result[i]}")
+
 
 # Ejecutar el programa
 if __name__ == "__main__":
