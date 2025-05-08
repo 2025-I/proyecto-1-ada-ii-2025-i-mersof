@@ -117,6 +117,7 @@ def main():
         print(f"  DP     : {dp_result[i]}")
         print(f"  Fuerza Bruta: {brute_result[i]}")
         print(f"  Greedy : {greedy_result[i]}")
+
 # Ejecutar el programa
 if __name__ == "__main__":
     main()

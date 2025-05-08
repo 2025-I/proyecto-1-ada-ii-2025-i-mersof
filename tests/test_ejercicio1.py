@@ -43,7 +43,7 @@ class TestPalindromo(unittest.TestCase):
 
     def test_b_pequeno(self):
         """Test b) Pequeño (100 frases): Validación general"""
-        from random import choices, randint
+        from random import choices
         import string
 
         def random_string(length=20):

@@ -124,9 +124,7 @@ def max_sumaDinamica(m, raiz, reglas, calificaciones):
     dp = {}
     # Utilizamos esta funcion para recorrer desde abajo hacia arriba
     # --- RECORRIDO POSTORDEN SIN RECURSIVIDAD ---
-    stack = []
-    visitado = [False] * m
-    stack.append((raiz, False))
+    stack = [(raiz, False)]
 
     while stack:
         nodo, procesado = stack.pop()
@@ -203,6 +201,6 @@ def max_sumaFuerzaBruta(m, reglas, calificaciones):
 
 
 if __name__ == "__main__":
-    read_file("voraz")
+    read_file("dinamica")
     #read_file("dinamica")
     #read_file("bruta")
