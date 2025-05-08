@@ -43,11 +43,11 @@ class TestsFiestaCompania(unittest.TestCase):
             calificaciones = list(range(m))  # Datos correctos
             print(calificaciones)
 
-            # resultado_voraz = arbol_reglasSupervicion(m, grafo_100, calificaciones, "voraz")
-            resultado_dinamica = arbol_reglasSupervicion(m, grafo_100, calificaciones, "dinamica")
+            resultado_voraz = arbol_reglasSupervicion(m, grafo_100, calificaciones, "voraz")
+            #resultado_dinamica = arbol_reglasSupervicion(m, grafo_100, calificaciones, "dinamica")
 
-            # self.assertTrue(validar_restricciones(m, grafo_100, resultado_voraz))
-            self.assertTrue(validar_restricciones(m, grafo_100, resultado_dinamica))
+            self.assertTrue(validar_restricciones(m, grafo_100, resultado_voraz))
+            #self.assertTrue(validar_restricciones(m, grafo_100, resultado_dinamica))
 
     def test_tamano_1000(self):
         m = 1000

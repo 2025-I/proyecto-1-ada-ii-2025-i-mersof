@@ -11,15 +11,12 @@ def medir_tiempos():
     resultados = {
         'voraz': [],
         'dinamica': [],
-        'bruta': [],
     }
 
-    for estrategia in ["voraz", "dinamica", "bruta"]:
-
+    for estrategia in ["voraz", "dinamica"]:
         print(f"\nEjecutando estrategia '{estrategia}'...")
 
-        suma = 0
-        for t in [4, 8, 12, 16, 20]:
+        for t in [100, 200, 300, 400, 500]:
 
             print(f"\n{'='*60}")
             print(f"Probando con m = {t}")
@@ -28,51 +25,62 @@ def medir_tiempos():
             grafo = generar_grafo(t)
             calificaciones = list(range(t))
 
-            start_time = time.perf_counter()
-            resultado = arbol_reglasSupervicion(t, grafo, calificaciones, estrategia)
-            end_time = time.perf_counter()
+            suma = 0
+            exitosas = 0
 
-            es_valida = validar_restricciones(t, grafo, resultado)
+            for _ in range(5):
+                start_time = time.perf_counter()
+                resultado = arbol_reglasSupervicion(t, grafo, calificaciones, estrategia)
+                end_time = time.perf_counter()
 
-            if es_valida is True:
-                suma += (end_time - start_time)*1000
+                if validar_restricciones(t, grafo, resultado):
+                    suma += (end_time - start_time) * 1000
+                    exitosas += 1
+                else:
+                    print(f"Resultado inválido en {estrategia} con m={t}")
+                    break
 
-            else: break
-
-        tiempo_promedio = (suma/5)
-        resultados[estrategia] = tiempo_promedio
+            if exitosas == 5:
+                promedio = suma / 5
+                resultados[estrategia].append(promedio)
+            else:
+                resultados[estrategia].append(None)  # o 0, o dejar vacío según prefieras
 
     print(resultados)
     return resultados
 
 def graficas(resultados):
+    estrategias = list(resultados.keys())
+    num_estrategias = len(estrategias)
+    width = 0.25  # ancho de cada barra
 
-    # Extraer los tiempos
-    voraz_time = resultados["voraz"]
-    dinamica_time = resultados["dinamica"]
-    bruta_time = resultados["bruta"]
+    tamaños = [100, 200, 300, 400, 500]
+    posiciones_base = list(range(len(tamaños)))
 
+    plt.figure(figsize=(10, 6))
 
-# Preparar datos para graficar
-    etiquetas = ['Voraz', 'Dinámica', 'Fuerza Bruta']
-    tiempos = [voraz_time, dinamica_time, bruta_time]
+    # Dibujar cada estrategia con desplazamiento en X
+    for i, estrategia in enumerate(estrategias):
+        desplazamiento = [x + width * i for x in posiciones_base]
+        tiempos = resultados[estrategia]
+        barras = plt.bar(desplazamiento, tiempos, width=width, label=estrategia.capitalize())
 
-    # Crear gráfica de barras
-    plt.figure(figsize=(8, 5))
-    barras = plt.bar(etiquetas, tiempos, color=["#4E79A7", "#F28E2B", "#f71f1f"])
+        # Añadir los valores encima de cada barra
+        for barra in barras:
+            yval = barra.get_height()
+            plt.text(barra.get_x() + barra.get_width()/2, yval + 0.0005,
+                     f"{yval:.3f}", ha='center', va='bottom', fontsize=8)
 
-    # Títulos y etiquetas
-    plt.xlabel("Estrategias")
-    plt.ylabel("Tiempo en milisegundos")
-    plt.title("Comparación de Tiempos Promedios (5 repeticiones)\n Voraz vs Dinámica vs Fuerza Bruta")
+    # Calcular el centro de cada grupo de barras para las etiquetas
+    tick_pos = [x + width * (num_estrategias - 1) / 2 for x in posiciones_base]
+    plt.xticks(tick_pos, tamaños)
+
+    # Etiquetas y detalles
+    plt.xlabel("Tamaño de entrada (m)")
+    plt.ylabel("Tiempo promedio (ms)")
+    plt.title("Comparación de Tiempos Promedios por Estrategia")
+    plt.legend()
     plt.grid(True, linestyle='--', alpha=0.5)
-
-    # Mostrar los valores encima de las barras
-    for barra in barras:
-        yval = barra.get_height()
-        plt.text(barra.get_x() + barra.get_width()/2, yval + 0.0005,
-                 f"{yval:.6f}", ha='center', va='bottom', fontsize=10)
-
     plt.tight_layout()
     plt.show()
 
