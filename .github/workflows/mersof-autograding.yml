@@ -41,32 +41,3 @@ jobs:
         COMPILACION-EJERCICIO2_RESULTS: "${{steps.compilacion-ejercicio2.outputs.result}}"
       with:
         runners: compilacion-ejercicio1,compilacion-ejercicio2
-        
-  codacy-coverage:
-     name: Codacy Coverage Report
-     runs-on: ubuntu-latest
-
-     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.10'
-
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Run tests with coverage
-        run: |
-          coverage run -m pytest
-          coverage xml
-
-      - name: Upload coverage to Codacy
-        run: |
-          curl -Ls https://coverage.codacy.com/get.sh | sh
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.CODACY_PROJECT_TOKEN }}
