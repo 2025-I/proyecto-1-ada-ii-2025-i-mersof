@@ -244,15 +244,15 @@ Se realizaron pruebas unitarias con distintos escenarios:
  
 ## Comparación de Complejidades
  
-        | Enfoque                        | Tiempo estimado      | Espacio     | Observaciones                                      |
-    |-------------------------------|----------------------|-------------|--------------------------------------------------|
-    | Fuerza bruta                  | O(2ⁿ)                | O(2ⁿ)       | Muy lento en cadenas largas                       |
-    | Programación dinámica         | O(n²)                | O(n²)       | Equilibrado, encuentra solución óptima            |
-    | Voraz                         | O(n²), mejor caso O(n)| O(1)        | Rápido pero solo encuentra substrings palindrómicos (no subsecuencias generales) |
+| Enfoque                        | Tiempo estimado           | Espacio         | Observaciones                                                                      |
+|--------------------------------|---------------------------|-----------------|------------------------------------------------------------------------------------|
+| Fuerza bruta                   | O(2ⁿ)                     | O(2ⁿ)           | Muy lento en cadenas largas                                                         |
+| Programación dinámica          | O(n²)                     | O(n²)           | Equilibrado, encuentra solución óptima                                             |
+| Voraz                          | O(n²), mejor caso O(n)    | O(1)            | Rápido pero solo encuentra substrings palindrómicos (no subsecuencias generales)   |
 
 ## Gráficas de Rendimiento
 
-![Gráfica de tiempos promedio](../docs/image-1.png) 
+![Gráfica de tiempos promedio](../docs/images/image-1.png) 
 
 **Fuerza Bruta:**  Aumenta exponencialmente con el tamaño de entrada.
 
