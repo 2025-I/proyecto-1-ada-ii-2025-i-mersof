@@ -116,10 +116,6 @@ def max_sumaVoraz(m, reglas, calificaciones):
     return invitados
 
 
-# Enfoque TOP-DOWN -> Guarda resultados, para no volverlos a calcular
-
-# Diccionario donde se guardan los resultados optimos de los subproblemas
-
 def max_sumaDinamica(m, raiz, reglas, calificaciones):
     dp = {}
     # Utilizamos esta funcion para recorrer desde abajo hacia arriba
