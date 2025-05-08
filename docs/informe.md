@@ -171,7 +171,7 @@ Se realizaron pruebas unitarias con distintos escenarios:
 
 ## Gráficas de Rendimiento
 
-    ![Gráfica de tiempos promedio](../docs/image-1.png)
+![Gráfica de tiempos promedio](../docs/image-1.png)
 
 **Se realizaron pruebas con entradas de:**
 
