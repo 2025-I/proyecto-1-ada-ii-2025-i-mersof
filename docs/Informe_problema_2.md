@@ -56,7 +56,7 @@ Este algoritmo cuenta con una complejidad computacional de O(2<sup>m</sup> * m <
 
 Aunque no es un algoritmo muy eficiente, con tamaños de entradas muy grandes, al hacer todas las combinaciones entre
 Los empleados garantizan tarde o temprano llegar a una solución óptima a diferencia del algoritmo voraz que tiene un tiempo
-de ejecución menor. En este caso en concreto, al tener una entrada **`m > 20`** es inviable calcular una complejidad
+de ejecución menor. En este caso en concreto, al tener una entrada **`m < 20`** es inviable calcular una complejidad
 experimental o sus tiempos de ejecución, puesto que el algoritmo tarda mucho en construirla.
 
     Ejemplo: m = 10
@@ -175,7 +175,14 @@ tarda mucho en construir la solución.
 | Dinámico     | O(2<sup>m</sup> * m <sup>2</sup>) | eficiente con m > 20, pero no siempre garantiza solucion optima |
 | Voraz        | O(m <sup>2</sup>)                 | eficiente con m > 20, siempre garantiza solución optima         |
 
-# 7. Conclusionesq  1A  
+# 7. Conclusiones
+
+Comparando tanto tiempos de ejecución como complejidad computacional de cada algoritmo, podemos inferir que la opcion más acertada
+es usar un algoritmo dinamico para hallar la solución, tarda menos, se puede ingresar grandes tamaños y siempre garantizará una solución optima.
+
+Acercado a este caso se pudo observar que, lo mejor para resolver el problema fue usar programación dinamica puesto que la voraz y de fuerza bruta
+son computacionalmente peores que la dinamica, y esta siempre aseguro la maximización de la suma de calificaciones cumpliendo con las debidas restricciones
+de no incluir en los invitaos ni al supervisor ni a su subordinado.
 
 
 
