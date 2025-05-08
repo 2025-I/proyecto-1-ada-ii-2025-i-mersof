@@ -36,6 +36,7 @@ def read_file(funcion):
 
 
 def arbol_reglasSupervicion(m, grafo, calificaciones, funcion):
+
     # Genera un diccionario donde cada llave es un supervisor y una lista de values que son los subordinado
     reglas = {i: [] for i in range(m)}
     tiene_supervisor = [False] * m
